@@ -1104,15 +1104,15 @@
    "p1": 0,
    "p2": 1,
    "p3": 2,
-   "p3b": 3,
    "v4": 10,
    "v3": 9,
    "vln": 11,
-   "vc": 12
+   "vc": 12,
+   "p4": 3
   }
  },
  "meta": {
   "editor": "magicalmusicmanufacturing",
-  "savedAt": "2026-10-02T06:03:46.403Z"
+  "savedAt": "2026-10-02T06:05:32.939Z"
  }
 }
