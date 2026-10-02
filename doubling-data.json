@@ -1088,17 +1088,20 @@
    "Chloé Vaught",
    "Vasken Ohanian",
    "Tiffany Chung",
-   "Player 13",
+   "Dustin Seo",
    "Player 14",
    "Player 15",
    "Player 16",
    "Player 17",
    "Player 18"
   ],
-  "assign": {}
+  "assign": {
+   "cl1": 7,
+   "cl2": 8
+  }
  },
  "meta": {
   "editor": "magicalmusicmanufacturing",
-  "savedAt": "2026-10-02T06:02:46.739Z"
+  "savedAt": "2026-10-02T06:02:59.650Z"
  }
 }
