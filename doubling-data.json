@@ -1,0 +1,366 @@
+{
+ "version": 6,
+ "totalBars": 748,
+ "tempo": null,
+ "beatsPerBar": null,
+ "tracks": [
+  {
+   "id": "cl1",
+   "name": "Clarinet 1 / bass clarinet",
+   "short": "Cl 1",
+   "key": "3",
+   "family": "Clarinets",
+   "station": "",
+   "link": "Clarinets",
+   "fixed": false
+  },
+  {
+   "id": "cl2",
+   "name": "Clarinet 2 / bass clarinet",
+   "short": "Cl 2",
+   "key": "",
+   "family": "Clarinets",
+   "station": "",
+   "link": "Clarinets",
+   "fixed": false
+  },
+  {
+   "id": "mr1",
+   "name": "Maracas 1",
+   "short": "Mrc 1",
+   "key": "k",
+   "family": "Maracas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "mr2",
+   "name": "Maracas 2",
+   "short": "Mrc 2",
+   "key": "l",
+   "family": "Maracas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "x1",
+   "name": "Xylophone 1",
+   "short": "Xyl 1",
+   "key": "b",
+   "family": "Xylophones",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "x2",
+   "name": "Xylophone 2",
+   "short": "Xyl 2",
+   "key": "n",
+   "family": "Xylophones",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "vib",
+   "name": "Vibraphone",
+   "short": "Vib",
+   "key": "m",
+   "family": "Vibraphone",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "m1",
+   "name": "Marimba 1",
+   "short": "Mar 1",
+   "key": "z",
+   "family": "Marimbas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "m2",
+   "name": "Marimba 2",
+   "short": "Mar 2",
+   "key": "x",
+   "family": "Marimbas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "m3",
+   "name": "Marimba 3",
+   "short": "Mar 3",
+   "key": "c",
+   "family": "Marimbas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "m3b",
+   "name": "Marimba 3, second player",
+   "short": "Mar 3 (2)",
+   "key": "v",
+   "family": "Marimbas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "m3c",
+   "name": "Marimba 3, third player",
+   "short": "Mar 3 (3)",
+   "key": "j",
+   "family": "Marimbas",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "p1",
+   "name": "Piano 1",
+   "short": "Pno 1",
+   "key": "a",
+   "family": "Pianos",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "p2",
+   "name": "Piano 2",
+   "short": "Pno 2",
+   "key": "s",
+   "family": "Pianos",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "p3",
+   "name": "Piano 3",
+   "short": "Pno 3",
+   "key": "d",
+   "family": "Pianos",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "p3b",
+   "name": "Piano 3, second player",
+   "short": "Pno 3 (2)",
+   "key": "g",
+   "family": "Pianos",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "p4",
+   "name": "Piano 4",
+   "short": "Pno 4",
+   "key": "f",
+   "family": "Pianos",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "p4b",
+   "name": "Piano 4, second player",
+   "short": "Pno 4 (2)",
+   "key": "h",
+   "family": "Pianos",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "v1",
+   "name": "Voice 1",
+   "short": "V 1",
+   "key": "q",
+   "family": "Voices",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "v2",
+   "name": "Voice 2",
+   "short": "V 2",
+   "key": "w",
+   "family": "Voices",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "v3",
+   "name": "Voice 3",
+   "short": "V 3",
+   "key": "e",
+   "family": "Voices",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "v4",
+   "name": "Voice 4",
+   "short": "V 4",
+   "key": "r",
+   "family": "Voices",
+   "station": "",
+   "link": "",
+   "fixed": false
+  },
+  {
+   "id": "vln",
+   "name": "Violin",
+   "short": "Vln",
+   "key": "1",
+   "family": "Strings",
+   "station": "",
+   "link": "",
+   "fixed": true
+  },
+  {
+   "id": "vc",
+   "name": "Cello",
+   "short": "Vc",
+   "key": "2",
+   "family": "Strings",
+   "station": "",
+   "link": "",
+   "fixed": true
+  }
+ ],
+ "sections": [
+  {
+   "id": "s0",
+   "name": "Pulses",
+   "start": 1,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s1",
+   "name": "I",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s2",
+   "name": "II",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s3",
+   "name": "IIIA",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s4",
+   "name": "IIIB",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s5",
+   "name": "IV",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s6",
+   "name": "V",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s7",
+   "name": "VI",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s8",
+   "name": "VII",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s9",
+   "name": "VIII",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s10",
+   "name": "IX",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s11",
+   "name": "X",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s12",
+   "name": "XI",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  },
+  {
+   "id": "s13",
+   "name": "Pulses (closing)",
+   "start": null,
+   "tempo": null,
+   "beats": null
+  }
+ ],
+ "events": {},
+ "bars": {},
+ "rules": {
+  "minBars": 1,
+  "minSec": 10,
+  "crossExtra": 0,
+  "locks": [],
+  "nevers": []
+ },
+ "target": 18,
+ "roster": {
+  "names": [],
+  "assign": {}
+ },
+ "meta": {
+  "editor": "magicalmusicmanufacturing",
+  "savedAt": "2026-10-02T05:56:24.194Z"
+ }
+}
