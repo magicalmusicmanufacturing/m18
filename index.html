@@ -1,0 +1,1795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>18 Musicians doubling map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9EDEC; --sheet:#F8F9F8; --ink:#1B2125; --ink-2:#55616A; --rule:#C2CACC; --rule-2:#DDE3E3;
+  --blue:#2853C4; --blue-wash:#DAE3F7; --red:#B92D38; --red-wash:#F5D9DB;
+  --amber:#8F5F06; --amber-wash:#F4E6C6; --green:#2B7654; --green-wash:#D6ECE0; --gray-wash:#E1E5E5;
+  --tl-cl:#2853C4; --tl-mrc:#8B5A2B; --tl-xyl:#D6559A; --tl-vib:#D9A400; --tl-mar:#7E4CC2; --tl-pno:#2E8B4E; --tl-vox:#EE7B7B; --tl-str:#E8822A; --tl-other:#55616A;
+  --font:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#13171A; --sheet:#1B2024; --ink:#E3E8E8; --ink-2:#9AA6AC; --rule:#3A444B; --rule-2:#2A3237;
+    --blue:#86A3FF; --blue-wash:#243158; --red:#FF7B85; --red-wash:#4A2328;
+    --amber:#EBB651; --amber-wash:#43361A; --green:#72D3A3; --green-wash:#1F3A2E; --gray-wash:#262D32;
+    --tl-cl:#86A3FF; --tl-mrc:#C8925F; --tl-xyl:#F28DC2; --tl-vib:#F2CF4A; --tl-mar:#B48CF0; --tl-pno:#6CCB8A; --tl-vox:#FF9E9E; --tl-str:#FFA357; --tl-other:#9AA6AC;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#13171A; --sheet:#1B2024; --ink:#E3E8E8; --ink-2:#9AA6AC; --rule:#3A444B; --rule-2:#2A3237;
+  --blue:#86A3FF; --blue-wash:#243158; --red:#FF7B85; --red-wash:#4A2328;
+  --amber:#EBB651; --amber-wash:#43361A; --green:#72D3A3; --green-wash:#1F3A2E; --gray-wash:#262D32;
+    --tl-cl:#86A3FF; --tl-mrc:#C8925F; --tl-xyl:#F28DC2; --tl-vib:#F2CF4A; --tl-mar:#B48CF0; --tl-pno:#6CCB8A; --tl-vox:#FF9E9E; --tl-str:#FFA357; --tl-other:#9AA6AC;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;font-weight:700}
+h1{font-size:21px;font-variation-settings:"wdth" 112;letter-spacing:-.01em}
+h2{font-size:18px;font-variation-settings:"wdth" 106}
+h3{font-size:13px;color:var(--ink-2);font-weight:600;margin:14px 0 6px}
+p{margin:0 0 8px}
+a{color:var(--blue)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 28px;padding:16px 20px 0;max-width:1320px;margin:0 auto;border-bottom:1.5px solid var(--ink)}
+.brand{padding-bottom:10px}
+.brand .sub{color:var(--ink-2);font-size:13.5px;margin:2px 0 0}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.tabs button{background:none;border:0;padding:10px 12px 9px;font-weight:600;font-size:14.5px;color:var(--ink-2);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-1.5px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.status{margin-left:auto;font-size:12.5px;color:var(--ink-2);padding-bottom:12px}
+.status.err{color:var(--red)}
+main{max-width:1320px;margin:0 auto;padding:20px}
+.panel[hidden]{display:none}
+
+.btn{border:1.5px solid var(--ink);background:transparent;padding:7px 13px;border-radius:4px;cursor:pointer;font-weight:600;font-size:14px;line-height:1.2}
+.btn:hover{background:var(--gray-wash)}
+.btn.primary{background:var(--ink);color:var(--sheet)}
+.btn.primary:hover{opacity:.9}
+.btn.small{padding:4px 9px;font-size:13px}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn.armed{background:var(--red);color:#fff;border-color:var(--red)}
+.btn:disabled{opacity:.45;cursor:default}
+.linkbtn{background:none;border:0;padding:0;color:var(--blue);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+input[type=text],input[type=number],input:not([type]),select,textarea{background:var(--sheet);border:1.5px solid var(--rule);border-radius:4px;padding:6px 8px;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+.hint{font-size:12.5px;color:var(--ink-2);margin-top:4px}
+.warn{color:var(--red)}
+.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Follow */
+.follow{display:grid;grid-template-columns:minmax(230px,280px) 1fr;gap:28px;align-items:start}
+@media (max-width:820px){.follow{grid-template-columns:1fr}}
+.barbox{display:inline-flex;flex-direction:column;align-items:center;border:3px solid var(--ink);padding:4px 20px 8px;min-width:190px;background:var(--sheet)}
+#barNum{font-size:clamp(64px,9vw,108px);font-weight:800;font-variation-settings:"wdth" 125;line-height:1;letter-spacing:-.02em}
+.barbox .of{font-size:13px;color:var(--ink-2)}
+.secname{font-size:22px;font-weight:700;font-variation-settings:"wdth" 110;margin-top:12px}
+.secrange{font-size:13px;color:var(--ink-2)}
+.navrow{display:flex;gap:8px;margin-top:14px}
+.navrow .btn{flex:1;padding:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nowline{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;margin-bottom:6px;font-size:14px}
+.nowline b{font-size:17px}
+.fam{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--rule-2)}
+.fam:first-child{border-top:0;padding-top:0}
+.fam h3{margin:0;font-size:13px;line-height:1.25}
+.tiles{display:flex;flex-wrap:wrap;gap:8px}
+.tiles .tile{flex:1 1 128px;max-width:176px}
+@media (max-width:520px){.fam{grid-template-columns:1fr;gap:4px}}
+.tile{position:relative;text-align:left;border:1.5px solid var(--rule);background:var(--sheet);padding:8px 30px 8px 14px;min-height:60px;cursor:pointer;border-radius:3px;transition:background-color .12s}
+.tile .nm{display:block;font-weight:650;font-size:14px;line-height:1.2}
+.tile .st{display:block;font-size:12px;color:var(--ink-2);margin-top:3px}
+.tile .key{position:absolute;top:7px;right:7px;min-width:20px;height:20px;padding:0 4px;border:1px solid var(--ink-2);border-radius:3px;font-size:11px;font-weight:700;display:grid;place-items:center;color:var(--ink-2);text-transform:uppercase}
+.tile.on{background:var(--blue-wash);border-color:var(--blue)}
+.tile.on::before{content:"";position:absolute;left:-1.5px;top:-1.5px;bottom:-1.5px;width:6px;background:var(--blue)}
+.tile.on .st{color:var(--ink)}
+.tile .chg{font-weight:700}
+.tile .chg.in{color:var(--blue)}
+.tile .chg.out{color:var(--red)}
+.tile.hit{outline:3px solid var(--ink);outline-offset:1px}
+@media (prefers-reduced-motion: reduce){.tile{transition:none}}
+.here{margin-top:14px;font-size:13.5px;color:var(--ink-2)}
+.tlhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 8px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:5px 11px;font-size:13px;font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.tlwrap{background:var(--sheet);border:1.5px solid var(--rule);padding:6px;overflow:hidden}
+#tl{display:block;width:100%;cursor:crosshair}
+.keys{margin-top:16px;font-size:13px;color:var(--ink-2)}
+.keys summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.keys dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:8px 0 0}
+.keys dt{font-weight:700;color:var(--ink)}
+.keys dd{margin:0}
+
+/* Tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl{border-collapse:collapse;width:100%;font-size:14px}
+.tbl th,.tbl td{border-bottom:1px solid var(--rule-2);padding:7px 8px;text-align:left;vertical-align:top}
+.tbl th{font-size:12.5px;color:var(--ink-2);font-weight:600;border-bottom:1.5px solid var(--rule)}
+.tbl td input,.tbl td select{padding:4px 6px}
+.tbl .num{width:90px}
+.tbl .key{width:60px}
+.block{background:var(--sheet);border:1.5px solid var(--rule);padding:16px 18px;margin-bottom:22px}
+.block>h2{margin-bottom:4px}
+.block>.lede{color:var(--ink-2);font-size:13.5px;margin-bottom:12px;max-width:78ch}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px 18px}
+
+/* Report */
+.summary{font-size:16px;max-width:80ch}
+.summary strong{font-size:18px}
+.pill{display:inline-block;padding:1px 7px;border-radius:3px;font-size:12.5px;font-weight:600}
+.pill.ok{background:var(--green-wash);color:var(--green)}
+.pill.tight{background:var(--amber-wash);color:var(--amber)}
+.pill.clash{background:var(--red-wash);color:var(--red)}
+.pill.never{background:var(--gray-wash);color:var(--ink-2)}
+.opt{border-top:1.5px solid var(--rule);padding-top:12px;margin-top:14px}
+.opt:first-of-type{border-top:0;margin-top:4px;padding-top:0}
+.opthead{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.opthead h3{margin:0;color:var(--ink);font-size:15px}
+.parts{font-weight:600}
+.dim{color:var(--ink-2)}
+.cand{display:grid;grid-template-columns:130px 1fr;gap:4px 14px;border-bottom:1px solid var(--rule-2);padding:8px 0}
+.cand:last-child{border-bottom:0}
+.cand .who{font-weight:700}
+.cand ul{margin:0;padding:0;list-style:none}
+.cand li{margin:1px 0}
+@media (max-width:600px){.cand{grid-template-columns:1fr}}
+.matrix{border-collapse:collapse;font-size:11px}
+.matrix th{font-weight:600;color:var(--ink-2);padding:2px 4px;white-space:nowrap}
+.matrix thead th{writing-mode:vertical-rl;transform:rotate(180deg);height:64px;text-align:left;vertical-align:bottom}
+.matrix td{width:34px;min-width:34px;height:26px;text-align:center;border:1px solid var(--paper);cursor:pointer;font-weight:600}
+.matrix td.ok{background:var(--green-wash);color:var(--green)}
+.matrix td.tight{background:var(--amber-wash);color:var(--amber)}
+.matrix td.clash{background:var(--red-wash);color:var(--red)}
+.matrix td.never{background:var(--gray-wash);color:var(--ink-2)}
+.matrix td.self,.matrix td.na{background:transparent;color:var(--rule);cursor:default}
+.matrix td.sel{outline:2px solid var(--ink);outline-offset:-2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;margin:10px 0}
+#matrixDetail{min-height:22px;margin-top:10px;font-size:14px}
+.secgrid td.hit{background:var(--blue-wash);color:var(--blue);font-weight:700;text-align:center}
+.secgrid td{text-align:center;font-size:12.5px}
+.secgrid td:first-child,.secgrid th:first-child{text-align:left;white-space:nowrap}
+.empty{padding:26px 0;color:var(--ink-2);max-width:70ch}
+.empty strong{color:var(--ink);display:block;font-size:17px;margin-bottom:4px}
+
+.banner{max-width:1320px;margin:12px auto 0;padding:10px 14px;background:var(--amber-wash);color:var(--ink);border-left:5px solid var(--amber);font-size:14px}
+.banner[hidden]{display:none}
+.tile:disabled{cursor:default;color:inherit}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:4px 0 12px;font-size:14px}
+.kv dt{color:var(--ink-2)}
+.kv dd{margin:0;word-break:break-word}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:20px;z-index:10}
+.modal[hidden]{display:none}
+.modal .box{background:var(--sheet);border:1.5px solid var(--ink);max-width:760px;width:100%;padding:18px;max-height:90%;display:flex;flex-direction:column;gap:10px}
+.modal textarea{flex:1;min-height:260px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>18 Musicians doubling map</h1>
+    <p class="sub">Log which parts play in each bar of Reich’s <i>Music for 18 Musicians</i>, then see who can double.</p>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" data-tab="follow" aria-selected="true">Follow score</button>
+    <button role="tab" data-tab="setup" aria-selected="false">Setup</button>
+    <button role="tab" data-tab="report" aria-selected="false">Doublings</button>
+    <button role="tab" data-tab="data" aria-selected="false">Sharing</button>
+  </nav>
+  <span id="status" class="status" aria-live="polite"></span>
+</header>
+
+<div id="roBanner" class="banner" hidden>You’re viewing the shared copy. To make changes, <button class="linkbtn" id="roSignIn">sign in on the Sharing tab</button>.</div>
+<main>
+<!-- FOLLOW -->
+<section id="tab-follow" class="panel" role="tabpanel">
+  <div class="follow">
+    <div>
+      <div class="barbox" aria-live="polite"><span id="barNum">1</span><span id="barTotal" class="of">of 748</span></div>
+      <div class="secname" id="secName"></div>
+      <div class="secrange" id="secRange"></div>
+      <div class="navrow">
+        <button class="btn" id="prevBar">Back</button>
+        <button class="btn primary" id="nextBar">Next bar</button>
+      </div>
+      <div class="two">
+        <div class="field"><label for="jump">Go to bar</label><input id="jump" type="number" min="1" inputmode="numeric"></div>
+        <div class="field"><label for="secJump">Go to section</label><select id="secJump"></select></div>
+      </div>
+      <div class="field">
+        <label for="rep">Repeats of this bar</label>
+        <input id="rep" type="text" placeholder="1, 4-6, or 12s" autocomplete="off">
+        <div class="hint" id="durHint"></div>
+      </div>
+      <div class="field">
+        <label for="note">Note for this bar</label>
+        <input id="note" type="text" placeholder="Cue, breath length, page turn" autocomplete="off">
+      </div>
+      <button class="btn small" id="undoBtn">Undo last change</button>
+      <details class="keys">
+        <summary>Keyboard</summary>
+        <dl>
+          <dt>Space or →</dt><dd>Next bar</dd>
+          <dt>Shift+Space or ←</dt><dd>Previous bar</dd>
+          <dt>] and [</dt><dd>Next or previous section</dd>
+          <dt>Part keys</dt><dd>Mark that part starting or stopping at this bar. Press again to remove the mark.</dd>
+          <dt>Ctrl/⌘+Z</dt><dd>Undo</dd>
+          <dt>Esc</dt><dd>Leave a text box</dd>
+        </dl>
+      </details>
+    </div>
+    <div>
+      <div class="nowline" id="nowLine"></div>
+      <p class="hint" style="margin:0 0 12px">Mark a change on the first bar it happens: the first bar a part plays, or the first bar it is silent. Everything in between fills in.</p>
+      <div id="tiles"></div>
+      <div class="here" id="hereLine"></div>
+    </div>
+  </div>
+  <div class="tlhead">
+    <h2 id="tlTitle">Whole piece</h2>
+    <div class="seg" role="group" aria-label="Timeline range">
+      <button data-zoom="whole" aria-pressed="true">Whole piece</button>
+      <button data-zoom="near" aria-pressed="false">Around this bar</button>
+    </div>
+  </div>
+  <div class="tlwrap"><canvas id="tl" aria-label="Timeline of which parts play in each bar. Click to jump to a bar."></canvas></div>
+  <p class="hint">Click the timeline to jump to a bar.</p>
+</section>
+
+<!-- SETUP -->
+<section id="tab-setup" class="panel" role="tabpanel" hidden>
+  <div class="block">
+    <h2>Piece and tempo</h2>
+    <p class="lede">Seconds per bar = beats per bar × 60 ÷ tempo × repeats. Sections can override the tempo and beats per bar. Leave tempo blank to work in bars only.</p>
+    <div class="grid3">
+      <div class="field"><label for="totalBars">Total bars</label><input id="totalBars" type="number" min="1"></div>
+      <div class="field"><label for="tempo">Tempo (beats per minute)</label><input id="tempo" type="number" min="1" step="any"></div>
+      <div class="field"><label for="beats">Beats per bar</label><input id="beats" type="number" min="0.5" step="any"></div>
+    </div>
+  </div>
+  <div class="block">
+    <h2>Sections</h2>
+    <p class="lede">Enter the first bar of each section from your score. A section runs until the next one starts.</p>
+    <div class="field" style="margin-top:0"><label for="secPaste">Fill in all start bars at once</label>
+      <div class="inline"><input id="secPaste" type="text" placeholder="1, 54, 120, …" style="flex:1;min-width:200px"><button class="btn small" id="secFill">Fill in</button></div>
+      <div class="hint" id="secPasteHint">Type or paste the first bar of each section in table order, separated by commas or spaces.</div></div>
+    <div id="secTable"></div>
+    <div class="inline" style="margin-top:10px"><button class="btn small" id="addSec">Add section</button><span id="secWarn" class="hint warn"></span></div>
+  </div>
+  <div class="block">
+    <h2>Parts</h2>
+    <p class="lede">One row per player’s line. Piano 3, Piano 4 and Marimba 3 each have a second-player row for the passages where two people share the part; log it only where the second player is in. Add more rows the same way if you find other shared parts. Station is where the instrument sits on stage (e.g. “L”, “C”, “R”); switching between stations can require extra time. Parts with the same shared-button name are logged with one button but still count as separate players. Tick “Own part only” for players who never cover anything else.</p>
+    <div id="trackTable"></div>
+    <div class="inline" style="margin-top:10px"><button class="btn small" id="addTrack">Add part</button><span id="keyWarn" class="hint warn"></span></div>
+  </div>
+  <div class="block">
+    <h2>Pairing rules</h2>
+    <p class="lede">“Same player” pairs are always kept together, like a clarinet and its bass clarinet. “Never together” pairs are kept apart regardless of timing.</p>
+    <div id="rulesBox"></div>
+  </div>
+</section>
+
+<!-- REPORT -->
+<section id="tab-report" class="panel" role="tabpanel" hidden>
+  <div class="block">
+    <h2>Changeover rules</h2>
+    <p class="lede">A doubling needs this much silence between one instrument stopping and the next starting. Seconds use the low end of any repeat range, so they’re the worst case.</p>
+    <div class="grid3">
+      <div class="field"><label for="minBars">Minimum silent bars</label><input id="minBars" type="number" min="0" step="1"></div>
+      <div class="field"><label for="minSec">Minimum seconds</label><input id="minSec" type="number" min="0" step="any"></div>
+      <div class="field"><label for="crossExtra">Extra seconds to change stations</label><input id="crossExtra" type="number" min="0" step="any"></div>
+      <div class="field"><label for="target">Players in the ensemble</label>
+        <input id="target" type="number" min="1" step="1"></div>
+    </div>
+  </div>
+  <div id="report"></div>
+</section>
+
+<!-- DATA -->
+<section id="tab-data" class="panel" role="tabpanel" hidden>
+  <div class="block">
+    <h2>Shared copy</h2>
+    <div id="shareInfo"></div>
+  </div>
+  <div class="block" id="signBlock">
+    <h2 id="signTitle">Sign in to edit</h2>
+    <div id="signState"></div>
+    <div id="signForm">
+      <p class="lede">Anyone with the link can view. To make changes, you need to be a collaborator on the GitHub repository and paste a GitHub token below. The token stays in this browser only.</p>
+      <div class="field" style="max-width:520px"><label for="tokenIn">GitHub token</label>
+        <div class="inline"><input id="tokenIn" type="password" autocomplete="off" spellcheck="false" style="flex:1;min-width:220px" placeholder="ghp_…"><button class="btn primary" id="signIn">Sign in</button></div>
+        <p class="hint" id="signMsg" aria-live="polite"></p></div>
+      <details class="keys"><summary>How to get a token</summary>
+        <ol style="margin:8px 0 0;padding-left:20px;line-height:1.6">
+          <li>Make sure the repository owner has added you as a collaborator (repository Settings → Collaborators) and you’ve accepted the invitation.</li>
+          <li>On GitHub, open your profile picture → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (classic).</li>
+          <li>Give it a name such as “18 Musicians”, choose an expiration date, and tick only <b>public_repo</b> (or <b>repo</b> if the repository is private).</li>
+          <li>Generate the token, copy it, and paste it above.</li>
+        </ol>
+        <p style="margin-top:8px">If the repository belongs to a GitHub organization, a fine-grained token limited to this one repository with “Contents: Read and write” also works.</p>
+      </details>
+    </div>
+  </div>
+  <div class="block">
+    <h2>Export</h2>
+    <p class="lede">Download a backup, the full bar-by-bar table for a spreadsheet, or the doubling report to print.</p>
+    <div class="inline">
+      <button class="btn" id="dlJson">Download backup (.json)</button>
+      <button class="btn" id="dlCsv">Download bar-by-bar table (.csv)</button>
+      <button class="btn" id="dlReport">Download doubling report (.html)</button>
+    </div>
+  </div>
+  <div class="block" id="importBlock">
+    <h2>Import</h2>
+    <p class="lede" id="importLede">Load a backup file, such as one downloaded from an earlier copy of this tool. This replaces everything currently logged.</p>
+    <div class="inline">
+      <label class="btn" for="importFile" style="display:inline-block">Choose backup file</label>
+      <input id="importFile" type="file" accept=".json,application/json" hidden>
+      <button class="linkbtn" id="pasteImport">Paste backup text instead</button>
+    </div>
+    <p class="hint" id="importMsg"></p>
+  </div>
+  <div class="block" id="resetBlock">
+    <h2>Start over</h2>
+    <p class="lede" id="resetLede">Erase every mark, repeat, note and roster. Parts, sections and tempo return to their defaults.</p>
+    <button class="btn danger" id="resetAll">Erase everything</button>
+  </div>
+</section>
+</main>
+
+<div class="modal" id="modal" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle"></h2>
+    <p class="hint" id="modalHint"></p>
+    <textarea id="modalText" spellcheck="false"></textarea>
+    <div class="inline"><button class="btn primary" id="modalAction"></button><button class="btn" id="modalClose">Close</button></div>
+  </div>
+</div>
+
+<script>
+/*
+  Settings for the shared copy.
+  On GitHub Pages (https://OWNER.github.io/REPO/) the owner and repository are detected
+  automatically. Fill them in only if you use a custom domain.
+*/
+const CONFIG = {
+  owner: '',                          // GitHub user or organization that owns the repository
+  repo: '',                           // repository name
+  dataBranch: 'doubling-data',        // branch that holds the shared data (created automatically)
+  dataPath: 'doubling-data.json'      // file on that branch
+};
+(function(){
+'use strict';
+
+/* ---------- defaults & state ---------- */
+const STORE_KEY = 'm18-doubling-v1';
+const FAMILIES = ['Clarinets','Maracas','Xylophones','Vibraphone','Marimbas','Pianos','Voices','Strings','Other'];
+const SECTION_NAMES = ['Pulses','I','II','IIIA','IIIB','IV','V','VI','VII','VIII','IX','X','XI','Pulses (closing)'];
+
+const T = (id,name,short,key,family,link)=>({id,name,short,key,family,station:'',link:link||'',fixed:false});
+const DEFAULT_TRACKS = [
+  T('cl1','Clarinet 1 / bass clarinet','Cl 1','3','Clarinets','Clarinets'),
+  T('cl2','Clarinet 2 / bass clarinet','Cl 2','','Clarinets','Clarinets'),
+  T('mr1','Maracas 1','Mrc 1','k','Maracas'),
+  T('mr2','Maracas 2','Mrc 2','l','Maracas'),
+  T('x1','Xylophone 1','Xyl 1','b','Xylophones'),
+  T('x2','Xylophone 2','Xyl 2','n','Xylophones'),
+  T('vib','Vibraphone','Vib','m','Vibraphone'),
+  T('m1','Marimba 1','Mar 1','z','Marimbas'),
+  T('m2','Marimba 2','Mar 2','x','Marimbas'),
+  T('m3','Marimba 3','Mar 3','c','Marimbas'),
+  T('m3b','Marimba 3, second player','Mar 3 (2)','v','Marimbas'),
+  T('m3c','Marimba 3, third player','Mar 3 (3)','j','Marimbas'),
+  T('p1','Piano 1','Pno 1','a','Pianos'),
+  T('p2','Piano 2','Pno 2','s','Pianos'),
+  T('p3','Piano 3','Pno 3','d','Pianos'),
+  T('p3b','Piano 3, second player','Pno 3 (2)','g','Pianos'),
+  T('p4','Piano 4','Pno 4','f','Pianos'),
+  T('p4b','Piano 4, second player','Pno 4 (2)','h','Pianos'),
+  T('v1','Voice 1','V 1','q','Voices'),
+  T('v2','Voice 2','V 2','w','Voices'),
+  T('v3','Voice 3','V 3','e','Voices'),
+  T('v4','Voice 4','V 4','r','Voices'),
+  T('vln','Violin','Vln','1','Strings'),
+  T('vc','Cello','Vc','2','Strings')
+];
+DEFAULT_TRACKS.forEach(t=>{ if(t.id==='vln'||t.id==='vc') t.fixed=true; });
+
+/* Version 1 had separate clarinet and bass clarinet parts and no second players. */
+function upgradeV2(s){
+  const N=s.totalBars;
+  const onArr=id=>{ const a=new Uint8Array(N+2), ev=s.events[id]||{}; let cur=0; for(let b=1;b<=N;b++){ if(ev[b]!==undefined) cur=ev[b]?1:0; a[b]=cur; } return a; };
+  [['cl1','bcl1','Clarinet 1 / bass clarinet'],['cl2','bcl2','Clarinet 2 / bass clarinet']].forEach(([cl,bcl,name])=>{
+    const ti=s.tracks.findIndex(t=>t.id===cl), bi=s.tracks.findIndex(t=>t.id===bcl);
+    if(ti<0 || bi<0) return;
+    const A=onArr(cl), B=onArr(bcl), ev={}; let cur=0;
+    for(let b=1;b<=N;b++){ const v=(A[b]||B[b])?1:0; if(v!==cur){ ev[b]=v; cur=v; } }
+    if(Object.keys(ev).length) s.events[cl]=ev; else delete s.events[cl];
+    delete s.events[bcl];
+    if(s.tracks[ti].name==='Clarinet '+cl.slice(-1)) s.tracks[ti].name=name;
+    s.tracks.splice(bi,1);
+    s.rules.locks=s.rules.locks.filter(p=>p[0]!==bcl&&p[1]!==bcl);
+    s.rules.nevers=s.rules.nevers.filter(p=>p[0]!==bcl&&p[1]!==bcl);
+    if(s.roster.assign[bcl]!=null && s.roster.assign[cl]==null) s.roster.assign[cl]=s.roster.assign[bcl];
+    delete s.roster.assign[bcl];
+  });
+  const oldKeys={cl2:'5',x1:'v',x2:'b',vib:'n',mr1:'h',mr2:'j'};
+  const newKeys={cl2:'4',x1:'b',x2:'n',vib:'m',mr1:'k',mr2:'l'};
+  s.tracks.forEach(t=>{ if(oldKeys[t.id]!==undefined && t.key===oldKeys[t.id]) t.key=newKeys[t.id]; });
+  [['p3b','p3'],['p4b','p4'],['m3b','m3']].forEach(([id,after])=>{
+    if(s.tracks.some(t=>t.id===id)) return;
+    const def=Object.assign({},DEFAULT_TRACKS.find(t=>t.id===id));
+    if(s.tracks.some(t=>(t.key||'').toLowerCase()===def.key)) def.key='';
+    const ai=s.tracks.findIndex(t=>t.id===after);
+    s.tracks.splice(ai<0?s.tracks.length:ai+1,0,def);
+  });
+  s.version=2;
+}
+
+/* Version 3 puts parts in score order and splits strings from clarinets. */
+function upgradeV3(s){
+  const famFix={cl1:'Clarinets',cl2:'Clarinets',vln:'Strings',vc:'Strings'};
+  s.tracks.forEach(t=>{ if(famFix[t.id] && (t.family==='Strings & winds'||!t.family)) t.family=famFix[t.id]; });
+  const order=DEFAULT_TRACKS.map(t=>t.id);
+  let prev=-1, bump=0;
+  const ranked=s.tracks.map((t,i)=>{
+    const d=order.indexOf(t.id);
+    if(d>=0){ prev=d; bump=0; return {t,r:d,i}; }
+    bump+=0.001; return {t,r:prev+0.5+bump,i};
+  });
+  ranked.sort((a,b)=>a.r-b.r || a.i-b.i);
+  s.tracks=ranked.map(x=>x.t);
+  s.version=3;
+}
+
+/* Version 4: one row per instrument, and shared buttons for parts that always play together. */
+function upgradeV4(s){
+  const fam={mr1:'Maracas',mr2:'Maracas',x1:'Xylophones',x2:'Xylophones',vib:'Vibraphone',m1:'Marimbas',m2:'Marimbas',m3:'Marimbas',m3b:'Marimbas'};
+  s.tracks.forEach(t=>{ if(fam[t.id] && t.family==='Percussion') t.family=fam[t.id]; });
+  const N=s.totalBars;
+  const onArr=id=>{ const a=new Uint8Array(N+2), ev=s.events[id]||{}; let cur=0; for(let b=1;b<=N;b++){ if(ev[b]!==undefined) cur=ev[b]?1:0; a[b]=cur; } return a; };
+  [[['cl1','cl2'],'Clarinets',{cl2:'4'}],[['vln','vc'],'Violin and cello',{vc:'2'}]].forEach(([ids,link,oldKeys])=>{
+    const ts=ids.map(id=>s.tracks.find(t=>t.id===id));
+    if(ts.some(t=>!t) || ts.some(t=>t.link)) return;
+    ts.forEach(t=>{ t.link=link; if(oldKeys[t.id]!==undefined && t.key===oldKeys[t.id]) t.key=''; });
+    const arrs=ids.map(onArr), ev={}; let cur=0;
+    for(let b=1;b<=N;b++){ const v=arrs.some(a=>a[b])?1:0; if(v!==cur){ ev[b]=v; cur=v; } }
+    ids.forEach(id=>{ if(Object.keys(ev).length) s.events[id]=Object.assign({},ev); else delete s.events[id]; });
+  });
+  s.version=4;
+}
+
+/* Version 5: violin and cello get their own buttons and never cover other parts. */
+function upgradeV5(s){
+  const vln=s.tracks.find(t=>t.id==='vln'), vc=s.tracks.find(t=>t.id==='vc');
+  [vln,vc].forEach(t=>{ if(!t) return; if(t.link==='Violin and cello') t.link=''; t.fixed=true; });
+  if(vc && !vc.key && !s.tracks.some(t=>(t.key||'').toLowerCase()==='2')) vc.key='2';
+  if(vln && !vln.key && !s.tracks.some(t=>(t.key||'').toLowerCase()==='1')) vln.key='1';
+  s.version=5;
+}
+
+/* Version 6: adds a third Marimba 3 player. Logged data is untouched. */
+function upgradeV6(s){
+  if(!s.tracks.some(t=>t.id==='m3c')){
+    const def=Object.assign({},DEFAULT_TRACKS.find(t=>t.id==='m3c'));
+    if(s.tracks.some(t=>(t.key||'').toLowerCase()===def.key)) def.key='';
+    let ai=s.tracks.findIndex(t=>t.id==='m3b'); if(ai<0) ai=s.tracks.findIndex(t=>t.id==='m3');
+    s.tracks.splice(ai<0?s.tracks.length:ai+1,0,def);
+  }
+  s.version=6;
+}
+
+function defaultState(){
+  return {
+    version:6, totalBars:748, tempo:null, beatsPerBar:null,
+    tracks:DEFAULT_TRACKS.map(t=>Object.assign({},t)),
+    sections: SECTION_NAMES.map((n,i)=>({id:'s'+i,name:n,start:i===0?1:null,tempo:null,beats:null})),
+    events:{}, bars:{},
+    rules:{minBars:1,minSec:10,crossExtra:0,locks:[],nevers:[]},
+    target:18,
+    roster:{names:[],assign:{}},
+    cursor:1, zoom:'whole', updatedAt:0
+  };
+}
+function migrate(o){
+  const d = defaultState();
+  if(!o || typeof o!=='object') return d;
+  const s = Object.assign({}, d, o);
+  s.rules = Object.assign({}, d.rules, o.rules||{});
+  if(!Array.isArray(s.rules.locks)) s.rules.locks=[];
+  if(!Array.isArray(s.rules.nevers)) s.rules.nevers=[];
+  s.roster = Object.assign({}, d.roster, o.roster||{});
+  if(!Array.isArray(s.roster.names)) s.roster.names=[];
+  if(!s.roster.assign || typeof s.roster.assign!=='object') s.roster.assign={};
+  if(!Array.isArray(s.tracks) || !s.tracks.length) s.tracks=d.tracks;
+  s.tracks.forEach(t=>{ if(t.station==null) t.station=''; if(t.link==null) t.link=''; t.fixed=!!t.fixed; if(!t.family) t.family='Other'; });
+  if(!Array.isArray(s.sections)) s.sections=d.sections;
+  if(!s.events || typeof s.events!=='object') s.events={};
+  if(!s.bars || typeof s.bars!=='object') s.bars={};
+  s.totalBars = Math.max(1, parseInt(s.totalBars,10)||748);
+  if(!(o.version>=2)) upgradeV2(s);
+  if(!(o.version>=3)) upgradeV3(s);
+  if(!(o.version>=4)) upgradeV4(s);
+  if(!(o.version>=5)) upgradeV5(s);
+  if(!(o.version>=6)) upgradeV6(s);
+  s.cursor = Math.min(Math.max(1, parseInt(s.cursor,10)||1), s.totalBars);
+  return s;
+}
+const REPO = detectRepo();
+const GH = { on:!!REPO, owner:REPO?REPO.owner:'', repo:REPO?REPO.repo:'', token:'', login:'', canEdit:false,
+  base:null, baseSha:null, etag:null, dirty:false, pushing:false, timer:null, firstDirtyAt:0, gen:0,
+  lastError:'', meta:null, ready:false, poller:null, signMsg:'' };
+const TOKEN_KEY = 'm18-gh-token';
+function detectRepo(){
+  if(CONFIG.owner && CONFIG.repo) return {owner:CONFIG.owner.trim(), repo:CONFIG.repo.trim()};
+  const h=location.hostname;
+  if(/\.github\.io$/i.test(h)){
+    const owner=h.split('.')[0];
+    const seg=location.pathname.split('/').filter(Boolean)[0];
+    return {owner, repo: seg && !/\.html?$/i.test(seg) ? seg : owner+'.github.io'};
+  }
+  return null;
+}
+function cacheKey(){ return GH.on ? STORE_KEY+':'+GH.owner+'/'+GH.repo : STORE_KEY; }
+function loadLocal(){
+  try{
+    const raw=localStorage.getItem(cacheKey()); if(!raw) return null;
+    const o=JSON.parse(raw);
+    if(GH.on){ GH.base=o.base||null; GH.baseSha=o.baseSha||null; GH.dirty=!!o.dirty; return o.state ? migrate(o.state) : null; }
+    return migrate(o);
+  }catch(e){ return null; }
+}
+let S = loadLocal() || defaultState();
+let tab = 'follow';
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pos = x => { const n=Number(x); return Number.isFinite(n)&&n>0 ? n : 0; };
+const nonneg = x => { const n=Number(x); return Number.isFinite(n)&&n>=0 ? n : 0; };
+const trackById = id => S.tracks.find(t=>t.id===id);
+const tname = id => { const t=trackById(id); return t ? t.name : id; };
+const tshort = id => { const t=trackById(id); return t ? (t.short||t.name) : id; };
+const plural = (n,w) => n+' '+w+(n===1?'':'s');
+
+function parseRep(str){
+  if(str==null) return {ok:true,kind:'reps',min:1,max:1,empty:true};
+  let s = String(str).trim().toLowerCase();
+  if(!s) return {ok:true,kind:'reps',min:1,max:1,empty:true};
+  s = s.replace(/^x\s*/,'').replace(/\s*x$/,'').replace(/×/g,'');
+  const m = s.match(/^(\d+(?:\.\d+)?)(?:\s*(?:-|–|to)\s*(\d+(?:\.\d+)?))?\s*(s|sec|secs|seconds)?$/);
+  if(!m) return {ok:false,kind:'reps',min:1,max:1};
+  let a = parseFloat(m[1]), b = m[2]!=null ? parseFloat(m[2]) : a;
+  if(b<a){ const t=a; a=b; b=t; }
+  return {ok:true,kind:m[3]?'sec':'reps',min:a,max:b};
+}
+function fmtNum(x){ return x>=10 ? String(Math.round(x)) : String(Math.round(x*10)/10); }
+function fmtSec(sec){ const a=fmtNum(sec.min), b=fmtNum(sec.max); return a===b ? a+' s' : a+'–'+b+' s'; }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function shuffle(arr,rng){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); const t=arr[i]; arr[i]=arr[j]; arr[j]=t; } return arr; }
+
+/* ---------- computation ---------- */
+let C = null, PC = new Map(), R = null;
+function invalidate(){ C=null; PC=new Map(); R=null; }
+function comp(){ if(!C) C=compute(); return C; }
+
+function compute(){
+  const N = S.totalBars;
+  const secs = S.sections.map((s,i)=>Object.assign({},s,{i}))
+    .filter(s=>Number.isFinite(s.start) && s.start>=1 && s.start<=N)
+    .sort((a,b)=>a.start-b.start || a.i-b.i);
+  const secIdx = new Int16Array(N+2).fill(-1);
+  const ranges = {};
+  secs.forEach((s,k)=>{
+    const end = k+1<secs.length ? secs[k+1].start-1 : N;
+    if(end>=s.start){ ranges[s.id]=[s.start,end]; for(let b=s.start;b<=end;b++) secIdx[b]=s.i; }
+  });
+  const on={}, spans={};
+  for(const t of S.tracks){
+    const arr = new Uint8Array(N+2), ev = S.events[t.id]||{};
+    let cur=0;
+    for(let b=1;b<=N;b++){ const v=ev[b]; if(v!==undefined) cur=v?1:0; arr[b]=cur; }
+    on[t.id]=arr;
+    const sp=[]; let st=0;
+    for(let b=1;b<=N+1;b++){ if(arr[b]&&!st) st=b; if(!arr[b]&&st){ sp.push([st,b-1]); st=0; } }
+    spans[t.id]=sp;
+  }
+  const dMin=new Float64Array(N+2), dMax=new Float64Array(N+2), unk=new Uint8Array(N+2);
+  const pMin=new Float64Array(N+2), pMax=new Float64Array(N+2), pUnk=new Int32Array(N+2);
+  let anyKnown=false;
+  for(let b=1;b<=N;b++){
+    const r = parseRep(S.bars[b] && S.bars[b].rep);
+    const si = secIdx[b], sec = si>=0 ? S.sections[si] : null;
+    const tempo = pos(sec&&sec.tempo) || pos(S.tempo);
+    const beats = pos(sec&&sec.beats) || pos(S.beatsPerBar);
+    if(r.kind==='sec'){ dMin[b]=r.min; dMax[b]=r.max; anyKnown=true; }
+    else if(tempo && beats){ const per=beats*60/tempo; dMin[b]=per*r.min; dMax[b]=per*r.max; anyKnown=true; }
+    else unk[b]=1;
+    pMin[b]=pMin[b-1]+dMin[b]; pMax[b]=pMax[b-1]+dMax[b]; pUnk[b]=pUnk[b-1]+unk[b];
+  }
+  return {N,on,spans,secIdx,ranges,secs,dMin,dMax,unk,pMin,pMax,pUnk,anyKnown};
+}
+function spanSec(c,a,b){
+  if(a>b) return {min:0,max:0,known:true};
+  return {min:c.pMin[b]-c.pMin[a-1], max:c.pMax[b]-c.pMax[a-1], known:(c.pUnk[b]-c.pUnk[a-1])===0};
+}
+function reqSec(a,b){
+  const ta=trackById(a), tb=trackById(b);
+  const sa=(ta&&ta.station||'').trim().toLowerCase(), sb=(tb&&tb.station||'').trim().toLowerCase();
+  return nonneg(S.rules.minSec) + (sa && sb && sa!==sb ? nonneg(S.rules.crossExtra) : 0);
+}
+function compareGap(x,y){
+  if(x.bars<0 || y.bars<0) return x.bars-y.bars;
+  if(x.sec.known && y.sec.known) return (x.sec.min-y.sec.min) || (x.bars-y.bars);
+  return x.bars-y.bars;
+}
+function transitions(ids){
+  const c=comp(), segs=[];
+  for(const id of ids) for(const s of (c.spans[id]||[])) segs.push({t:id,s:s[0],e:s[1]});
+  segs.sort((x,y)=>x.s-y.s || x.e-y.e);
+  const out=[];
+  for(let k=1;k<segs.length;k++){
+    const p=segs[k-1], q=segs[k];
+    if(p.t===q.t) continue;
+    const bars=q.s-p.e-1;
+    if(bars<0){ out.push({from:p.t,to:q.t,bars,at:q.s,sec:{min:0,max:0,known:false},fail:true,clash:true}); continue; }
+    const sec=spanSec(c,p.e+1,q.s-1), req=reqSec(p.t,q.t);
+    const fail = bars < nonneg(S.rules.minBars) || (sec.known && sec.min+1e-9 < req);
+    out.push({from:p.t,to:q.t,bars,at:q.s,sec,fail,req});
+  }
+  return out;
+}
+function worstOf(tr){ let w=null; for(const t of tr) if(!w || compareGap(t,w)<0) w=t; return w; }
+function isPair(list,a,b){ return list.some(p=>(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a)); }
+
+function pairInfo(a,b){
+  const key = a<b ? a+'|'+b : b+'|'+a;
+  if(PC.has(key)) return PC.get(key);
+  const c=comp(), A=c.on[a], B=c.on[b];
+  let ov=0, rs=0; const ranges=[];
+  for(let i=1;i<=c.N+1;i++){
+    const both = i<=c.N && A[i] && B[i];
+    if(both){ ov++; if(!rs) rs=i; } else if(rs){ ranges.push([rs,i-1]); rs=0; }
+  }
+  let info;
+  if(ov){ info={status:'clash',overlapBars:ov,ranges}; }
+  else {
+    const tr=transitions([a,b]); const fails=tr.filter(t=>t.fail).length;
+    info={status:fails?'tight':'ok',transitions:tr.length,worst:worstOf(tr),fails};
+  }
+  info.used = c.spans[a].length>0 && c.spans[b].length>0;
+  if(isPair(S.rules.nevers,a,b)){ info.never=true; if(info.status!=='clash') info.status='never'; }
+  const ta=trackById(a), tb=trackById(b);
+  if((ta&&ta.fixed)||(tb&&tb.fixed)){ info.dedicated=(ta&&ta.fixed)?a:b; if(info.status!=='clash') info.status='never'; }
+  info.locked = isPair(S.rules.locks,a,b);
+  PC.set(key,info);
+  return info;
+}
+const bad = st => st==='clash' || st==='tight' || st==='never';
+
+function gapText(t, withParts){
+  if(!t) return 'no changes needed';
+  const who = withParts ? tshort(t.from)+' → '+tshort(t.to)+': ' : '';
+  if(t.clash) return who+'overlap at bar '+t.at;
+  let s = who + plural(t.bars,'silent bar');
+  if(t.sec.known) s += ', '+fmtSec(t.sec);
+  return s + ', into bar '+t.at;
+}
+
+function playerStats(ids, cache){
+  const key = ids.slice().sort().join(',');
+  if(cache && cache.has(key)) return cache.get(key);
+  const tr = ids.length>1 ? transitions(ids) : [];
+  const problems=[];
+  for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
+    const p=pairInfo(ids[i],ids[j]);
+    if(p.status==='clash') problems.push(tshort(ids[i])+' and '+tshort(ids[j])+' overlap for '+plural(p.overlapBars,'bar')+' (first at bar '+p.ranges[0][0]+')');
+    else if(p.status==='never') problems.push(p.dedicated ? tname(p.dedicated)+' plays only its own part' : tshort(ids[i])+' and '+tshort(ids[j])+' are marked never together');
+  }
+  tr.filter(t=>t.fail && !t.clash).forEach(t=>problems.push('Too fast: '+gapText(t,true)));
+  const out = {ids, switches:tr.length, worst:worstOf(tr), fails:tr.filter(t=>t.fail).length, problems};
+  if(cache) cache.set(key,out);
+  return out;
+}
+
+/* ---------- solver ---------- */
+function colorSearch(n, adj, K, rng, budget){
+  const col = new Int16Array(n).fill(-1);
+  const deg = adj.map(r=>r.reduce((s,x)=>s+(x?1:0),0));
+  const tieBreak = rng ? Array.from({length:n},()=>rng()) : Array.from({length:n},(_,i)=>-i);
+  let steps=0, found=null, exhausted=false;
+  function pick(){
+    let best=-1, bs=-1, bd=-1, bt=-Infinity;
+    for(let v=0;v<n;v++){
+      if(col[v]>=0) continue;
+      const seen=new Set();
+      for(let u=0;u<n;u++) if(adj[v][u] && col[u]>=0) seen.add(col[u]);
+      const s=seen.size;
+      if(s>bs || (s===bs && (deg[v]>bd || (deg[v]===bd && tieBreak[v]>bt)))){ best=v; bs=s; bd=deg[v]; bt=tieBreak[v]; }
+    }
+    return best;
+  }
+  function rec(done, used){
+    if(found) return;
+    if(++steps>budget){ exhausted=true; return; }
+    if(done===n){ found=Array.from(col); return; }
+    const v=pick();
+    const forb=new Set();
+    for(let u=0;u<n;u++) if(adj[v][u] && col[u]>=0) forb.add(col[u]);
+    const opts=[];
+    for(let c=0;c<used;c++) if(!forb.has(c)) opts.push(c);
+    if(rng) shuffle(opts,rng);
+    if(used<K) opts.push(used);
+    for(const c of opts){
+      col[v]=c; rec(done+1, c===used?used+1:used); col[v]=-1;
+      if(found || exhausted) return;
+    }
+  }
+  rec(0,0);
+  return {found, exhausted};
+}
+function groupsFromColors(colors){
+  const g={}; colors.forEach((c,i)=>{ (g[c]=g[c]||[]).push(i); });
+  return Object.values(g);
+}
+function canonKey(groups){ return groups.map(g=>g.slice().sort((a,b)=>a-b).join('.')).sort().join('|'); }
+
+function analyze(){
+  if(R) return R;
+  const c=comp();
+  const used = S.tracks.filter(t=>c.spans[t.id].length>0).map(t=>t.id);
+  const unused = S.tracks.filter(t=>c.spans[t.id].length===0).map(t=>t.id);
+  const warnings=[];
+  // union-find for "same player" locks
+  const parent={}; used.forEach(id=>parent[id]=id);
+  const find = x => parent[x]===x ? x : (parent[x]=find(parent[x]));
+  S.rules.locks.forEach(([a,b])=>{ if(parent[a]!==undefined && parent[b]!==undefined){ parent[find(a)]=find(b); } });
+  const gmap={}; used.forEach(id=>{ const r=find(id); (gmap[r]=gmap[r]||[]).push(id); });
+  const nodes = Object.values(gmap).sort((x,y)=>S.tracks.findIndex(t=>t.id===x[0]) - S.tracks.findIndex(t=>t.id===y[0]));
+  nodes.forEach(g=>{
+    for(let i=0;i<g.length;i++) for(let j=i+1;j<g.length;j++){
+      const p=pairInfo(g[i],g[j]);
+      if(bad(p.status)) warnings.push(tname(g[i])+' and '+tname(g[j])+' are set as the same player, but '+(p.status==='clash'?'they overlap at bar '+p.ranges[0][0]:p.status==='never'?'they are also marked never together':'the change between them is too fast ('+gapText(p.worst)+')')+'.');
+    }
+  });
+  const n=nodes.length;
+  const adj = nodes.map((g,i)=>nodes.map((h,j)=>{
+    if(i===j) return false;
+    for(const a of g) for(const b of h) if(bad(pairInfo(a,b).status)) return true;
+    return false;
+  }));
+  let k=n, kExact=true, base=null;
+  if(n){
+    for(let K=1;K<=n;K++){
+      const r=colorSearch(n,adj,K,null,150000);
+      if(r.found){ k=K; base=r.found; break; }
+      if(r.exhausted){ kExact=false; }
+    }
+  }
+  const res = {used,unused,nodes,adj,k,kExact,base,warnings,options:[],optionNote:''};
+  R = res;
+  buildOptions(res);
+  return res;
+}
+
+function scoreGroups(groups, nodes, cache){
+  let fails=0, sw=0, worst=null, maxParts=0;
+  const players = groups.map(g=>{
+    const ids=[].concat(...g.map(i=>nodes[i]));
+    const st=playerStats(ids,cache);
+    fails+=st.fails; sw+=st.switches; maxParts=Math.max(maxParts,ids.length);
+    if(st.worst && (!worst || compareGap(st.worst,worst)<0)) worst=st.worst;
+    return st;
+  });
+  return {groups, players, fails, sw, worst, maxParts};
+}
+function betterScore(a,b){ // true if a better than b
+  if(a.fails!==b.fails) return a.fails<b.fails;
+  if(a.worst && b.worst){ const d=compareGap(a.worst,b.worst); if(d!==0) return d>0; }
+  else if(a.worst!==b.worst) return !a.worst;
+  if(a.sw!==b.sw) return a.sw<b.sw;
+  return a.maxParts<b.maxParts;
+}
+function buildOptions(res){
+  const {nodes,adj,k} = res, n=nodes.length, N=S.target;
+  res.options=[];
+  if(!n) return;
+  if(N<k){ res.optionNote = plural(N,'player')+' can’t cover the parts logged so far with these changeover rules. At least '+k+' are needed.'; return; }
+  const cache=new Map();
+  if(N>=n){
+    const groups=nodes.map((_,i)=>[i]);
+    res.options=[scoreGroups(groups,nodes,cache)];
+    res.optionNote = n<N ? 'Every part can have its own player, leaving '+plural(N-n,'extra player')+'. Parts you haven’t logged yet may use them.' : 'Every part can have its own player.';
+    return;
+  }
+  const rng=mulberry32(18);
+  const starts=new Map();
+  if(res.base){ const g=groupsFromColors(res.base); starts.set(canonKey(g),g); }
+  for(let a=0;a<160 && starts.size<36;a++){
+    const r=colorSearch(n,adj,k,rng,20000);
+    if(r.found){ const g=groupsFromColors(r.found); const key=canonKey(g); if(!starts.has(key)) starts.set(key,g); }
+  }
+  const results=new Map();
+  for(const g0 of starts.values()){
+    let groups=g0.map(g=>g.slice());
+    while(groups.length<N){
+      let best=null;
+      groups.forEach((g,gi)=>{
+        if(g.length<2) return;
+        g.forEach(node=>{
+          const ng=groups.map((h,hi)=>hi===gi ? h.filter(x=>x!==node) : h.slice());
+          ng.push([node]);
+          const sc=scoreGroups(ng,nodes,cache);
+          if(!best || betterScore(sc,best)) best=sc;
+        });
+      });
+      if(!best) break;
+      groups=best.groups;
+    }
+    const sc=scoreGroups(groups,nodes,cache);
+    const key=canonKey(groups);
+    if(!results.has(key)) results.set(key,sc);
+  }
+  const list=[...results.values()].sort((a,b)=>betterScore(a,b)?-1:betterScore(b,a)?1:0);
+  res.options=list.slice(0,5);
+  res.optionNote = list.length>1 ? 'Showing the '+Math.min(5,list.length)+' strongest of '+list.length+' arrangements found, ranked by the roomiest tightest changeover.' : '';
+}
+
+/* ---------- persistence & GitHub sync ---------- */
+function saveLocal(){
+  try{
+    const v = GH.on ? {state:S, base:GH.base, baseSha:GH.baseSha, dirty:GH.dirty} : S;
+    localStorage.setItem(cacheKey(), JSON.stringify(v)); return true;
+  }catch(e){ return false; }
+}
+const readOnly = () => GH.on && !GH.canEdit;
+function stable(v){
+  if(v===undefined) return 'undefined';
+  if(Array.isArray(v)) return '['+v.map(stable).join(',')+']';
+  if(v && typeof v==='object') return '{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}';
+  return JSON.stringify(v);
+}
+const same = (a,b) => stable(a)===stable(b);
+const clone = v => v===undefined ? undefined : JSON.parse(JSON.stringify(v));
+const isPlain = o => o!==null && typeof o==='object' && !Array.isArray(o);
+const idArray = a => Array.isArray(a) && a.every(x=>isPlain(x) && typeof x.id==='string');
+/* Three-way merge: changes made locally since the last sync are layered over changes others saved. */
+function merge3(b,l,r){
+  if(same(l,b)) return clone(r);
+  if(same(r,b) || same(l,r)) return clone(l);
+  if(isPlain(l) && isPlain(r) && (b===undefined || isPlain(b))){
+    const base=b||{}, out={};
+    new Set([...Object.keys(base),...Object.keys(l),...Object.keys(r)]).forEach(k=>{ const v=merge3(base[k],l[k],r[k]); if(v!==undefined) out[k]=v; });
+    return out;
+  }
+  if(idArray(l) && idArray(r) && (b===undefined || idArray(b))){
+    const base=b||[], bm=new Map(base.map(x=>[x.id,x])), lm=new Map(l.map(x=>[x.id,x])), rm=new Map(r.map(x=>[x.id,x]));
+    const order=l.map(x=>x.id);
+    r.forEach((x,i)=>{ if(!lm.has(x.id) && !bm.has(x.id)){ const prev=i>0?r[i-1].id:null; const at=prev?order.indexOf(prev):-1; order.splice(at+1,0,x.id); } });
+    const out=[]; order.forEach(id=>{ const v=merge3(bm.get(id),lm.get(id),rm.get(id)); if(v!==undefined) out.push(v); });
+    return out;
+  }
+  return clone(l);
+}
+function normalizeEv(ev){
+  const keys=Object.keys(ev).map(Number).sort((a,b)=>a-b); let cur=0;
+  for(const k of keys){ const v=ev[k]?1:0; if(v===cur) delete ev[k]; else { ev[k]=v; cur=v; } }
+}
+function normalizeDoc(doc){
+  if(doc && doc.events) Object.keys(doc.events).forEach(id=>{ normalizeEv(doc.events[id]); if(!Object.keys(doc.events[id]).length) delete doc.events[id]; });
+  return doc;
+}
+function sharedOf(st){ const o=JSON.parse(JSON.stringify(st)); delete o.cursor; delete o.zoom; delete o.updatedAt; delete o.meta; return o; }
+function applyShared(doc){
+  const keep={cursor:S.cursor, zoom:S.zoom, updatedAt:S.updatedAt};
+  S=migrate(Object.assign({}, clone(doc), keep));
+  invalidate();
+}
+function markDirty(){
+  S.updatedAt=Date.now();
+  if(GH.on){ GH.dirty=true; GH.gen++; schedulePush(); }
+  saveLocal(); setStatus();
+}
+function toB64(str){ const bytes=new TextEncoder().encode(str); let bin=''; for(let i=0;i<bytes.length;i+=0x8000) bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000)); return btoa(bin); }
+function fromB64(b64){ const bin=atob(String(b64).replace(/\s/g,'')); const bytes=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+async function gh(path, opts){
+  opts=opts||{};
+  const headers=Object.assign({'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}, opts.headers||{});
+  if(GH.token) headers.Authorization='Bearer '+GH.token;
+  if(opts.body) headers['Content-Type']='application/json';
+  const res=await fetch('https://api.github.com'+path,{method:opts.method||'GET',headers,body:opts.body?JSON.stringify(opts.body):undefined,cache:'no-store'});
+  let data=null;
+  if(res.status!==204 && res.status!==304){ try{ data=await res.json(); }catch(e){} }
+  return {status:res.status, ok:res.ok, data, etag:res.headers.get('ETag')};
+}
+function httpError(r){
+  const m=(r.data && r.data.message) || '';
+  let msg;
+  if(r.status===401) msg='GitHub didn’t accept the token. It may have expired or been mistyped.';
+  else if(r.status===403 && /rate limit/i.test(m)) msg='GitHub’s hourly limit for viewers was reached. Wait a few minutes, or sign in.';
+  else if(r.status===403) msg='This GitHub account doesn’t have permission to change '+GH.owner+'/'+GH.repo+'.';
+  else if(r.status===404) msg='Couldn’t find '+GH.owner+'/'+GH.repo+'. If it’s private, sign in with an account that has access.';
+  else msg='GitHub returned an error ('+r.status+(m?': '+m:'')+').';
+  const e=new Error(msg); e.status=r.status; return e;
+}
+const repoPath = () => '/repos/'+encodeURIComponent(GH.owner)+'/'+encodeURIComponent(GH.repo);
+const filePath = () => repoPath()+'/contents/'+CONFIG.dataPath.split('/').map(encodeURIComponent).join('/');
+async function fetchRemote(useEtag){
+  const r=await gh(filePath()+'?ref='+encodeURIComponent(CONFIG.dataBranch), useEtag && GH.etag ? {headers:{'If-None-Match':GH.etag}} : {});
+  if(r.status===304) return {unchanged:true};
+  if(r.status===404){
+    const repo=await gh(repoPath());
+    if(!repo.ok) throw httpError(repo);
+    return {missing:true};
+  }
+  if(!r.ok) throw httpError(r);
+  let doc;
+  try{ doc=JSON.parse(fromB64(r.data.content)); }catch(e){ throw new Error('The shared data file on GitHub couldn’t be read.'); }
+  return {sha:r.data.sha, doc, etag:r.etag};
+}
+async function ensureBranch(){
+  const b=await gh(repoPath()+'/branches/'+encodeURIComponent(CONFIG.dataBranch));
+  if(b.ok) return;
+  if(b.status!==404) throw httpError(b);
+  const repo=await gh(repoPath()); if(!repo.ok) throw httpError(repo);
+  const ref=await gh(repoPath()+'/git/ref/heads/'+encodeURIComponent(repo.data.default_branch));
+  if(!ref.ok) throw new Error('The repository needs at least one file (such as index.html) before data can be saved.');
+  const mk=await gh(repoPath()+'/git/refs',{method:'POST',body:{ref:'refs/heads/'+CONFIG.dataBranch, sha:ref.data.object.sha}});
+  if(!mk.ok && mk.status!==422) throw httpError(mk);
+}
+function schedulePush(){
+  if(!GH.on || !GH.canEdit) return;
+  if(!GH.firstDirtyAt) GH.firstDirtyAt=Date.now();
+  clearTimeout(GH.timer);
+  const wait=Math.max(0, Math.min(6000, 45000-(Date.now()-GH.firstDirtyAt)));
+  GH.timer=setTimeout(()=>{ GH.firstDirtyAt=0; push(); }, wait);
+}
+function focusedEditor(){
+  const a=document.activeElement;
+  return a && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName) && a.closest('#tab-setup,#tab-report') ? a : null;
+}
+async function push(){
+  if(!GH.on || !GH.canEdit || GH.pushing) return;
+  clearTimeout(GH.timer); GH.timer=null; GH.firstDirtyAt=0;
+  GH.pushing=true; setStatus();
+  let saved=false;
+  try{
+    for(let attempt=0; attempt<5 && !saved; attempt++){
+      const L0=sharedOf(S), gen0=GH.gen;
+      const remote=await fetchRemote(false);
+      if(remote.missing) await ensureBranch();
+      const merged = (remote.missing || remote.sha===GH.baseSha) ? L0
+        : normalizeDoc(merge3(GH.base||{}, L0, sharedOf(migrate(remote.doc))));
+      const meta={editor:GH.login||'an editor', savedAt:new Date().toISOString()};
+      const body={message:'Update doubling map ('+meta.editor+')', content:toB64(JSON.stringify(Object.assign({},merged,{meta}),null,1)), branch:CONFIG.dataBranch};
+      if(!remote.missing) body.sha=remote.sha;
+      const r=await gh(filePath(),{method:'PUT',body});
+      if(r.status===409 || r.status===422) continue;
+      if(!r.ok) throw httpError(r);
+      saved=true;
+      GH.meta=meta; GH.etag=null;
+      const now=sharedOf(S);
+      const next = GH.gen===gen0 ? merged : normalizeDoc(merge3(L0, now, merged));
+      GH.base=merged; GH.baseSha=r.data.content.sha;
+      if(!same(next, now)){ applyShared(next); renderAll(); }
+      GH.dirty=!same(next, merged);
+      GH.lastError='';
+      saveLocal();
+    }
+    if(!saved) GH.lastError='Couldn’t save because others kept saving at the same moment. Trying again shortly.';
+  }catch(e){ GH.lastError=e.message||String(e); }
+  GH.pushing=false; setStatus(); renderShare();
+  if(GH.dirty) { GH.firstDirtyAt=0; clearTimeout(GH.timer); GH.timer=setTimeout(push, GH.lastError?20000:4000); }
+}
+async function poll(){
+  if(!GH.on || GH.pushing || document.hidden) return;
+  if(focusedEditor()) return;
+  try{
+    const r=await fetchRemote(true);
+    if(r.unchanged || r.missing){ if(GH.lastError){ GH.lastError=''; setStatus(); } return; }
+    GH.etag=r.etag; GH.meta=r.doc.meta||null;
+    if(r.sha===GH.baseSha){ GH.lastError=''; setStatus(); renderShare(); return; }
+    if(GH.dirty && GH.canEdit){ push(); return; }
+    const doc=sharedOf(migrate(r.doc));
+    GH.base=doc; GH.baseSha=r.sha; GH.dirty=false; GH.lastError='';
+    undoStack.length=0;
+    applyShared(doc); saveLocal(); renderAll();
+  }catch(e){ GH.lastError=e.message||String(e); }
+  setStatus(); renderShare();
+}
+function startPolling(){
+  clearInterval(GH.poller);
+  GH.poller=setInterval(poll, GH.token ? 20000 : 90000);
+}
+async function verifyToken(){
+  const u=await gh('/user'); if(!u.ok) throw httpError(u);
+  GH.login=u.data.login;
+  const rp=await gh(repoPath()); if(!rp.ok) throw httpError(rp);
+  const p=rp.data.permissions||{};
+  GH.canEdit=!!(p.push || p.admin || p.maintain);
+}
+async function signIn(){
+  const t=$('#tokenIn').value.trim();
+  if(!t){ GH.signMsg='Paste a token first.'; renderShare(); return; }
+  GH.token=t; GH.signMsg='Checking…'; renderShare();
+  try{
+    await verifyToken();
+    try{ localStorage.setItem(TOKEN_KEY,t); }catch(e){}
+    GH.signMsg = GH.canEdit ? '' : 'Signed in as '+GH.login+', but this account can’t change '+GH.owner+'/'+GH.repo+'. Ask the owner to add you as a collaborator, then sign in again.';
+    $('#tokenIn').value='';
+    startPolling();
+    await poll();
+  }catch(e){
+    GH.token=''; GH.login=''; GH.canEdit=false;
+    GH.signMsg=e.message||'Sign-in failed.';
+  }
+  renderAll(); renderShare();
+}
+function signOut(){
+  try{ localStorage.removeItem(TOKEN_KEY); }catch(e){}
+  GH.token=''; GH.login=''; GH.canEdit=false; GH.signMsg='';
+  startPolling(); renderAll(); renderShare();
+}
+function fmtWhen(iso){ try{ return new Date(iso).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); }catch(e){ return iso; } }
+function setStatus(){
+  const el=$('#status'); el.classList.remove('err');
+  let t;
+  if(!GH.on) t='Saved in this browser';
+  else if(GH.lastError){ t=GH.lastError; el.classList.add('err'); }
+  else if(!GH.ready) t='Connecting to GitHub…';
+  else if(GH.pushing) t='Saving to GitHub…';
+  else if(GH.dirty && GH.canEdit) t='Saving shortly…';
+  else if(GH.canEdit) t='Saved to GitHub';
+  else t='Viewing shared copy';
+  el.textContent=t;
+}
+function renderShare(){
+  const info=$('#shareInfo'); if(!info) return;
+  if(!GH.on){
+    info.innerHTML='<p class="lede">This copy isn’t connected to GitHub, so changes save in this browser only. Once the page is published with GitHub Pages it connects automatically. If you use a custom domain, fill in <code>owner</code> and <code>repo</code> in the CONFIG section at the top of the file.</p>';
+    $('#signBlock').hidden=true;
+    $('#importLede').textContent='Load a backup file, such as one downloaded from an earlier copy of this tool. This replaces everything currently logged.';
+    $('#resetLede').textContent='Erase every mark, repeat, note and roster. Parts, sections and tempo return to their defaults.';
+    return;
+  }
+  const repoUrl='https://github.com/'+encodeURIComponent(GH.owner)+'/'+encodeURIComponent(GH.repo);
+  let h='<dl class="kv"><dt>Repository</dt><dd><a href="'+esc(repoUrl)+'" target="_blank" rel="noopener">'+esc(GH.owner+'/'+GH.repo)+'</a></dd>'+
+    '<dt>Data file</dt><dd>'+esc(CONFIG.dataPath)+' on the <a href="'+esc(repoUrl+'/commits/'+encodeURIComponent(CONFIG.dataBranch))+'" target="_blank" rel="noopener">'+esc(CONFIG.dataBranch)+'</a> branch (every save is kept in its history)</dd>'+
+    '<dt>Last change</dt><dd>'+(GH.meta ? esc(GH.meta.editor)+', '+esc(fmtWhen(GH.meta.savedAt)) : (GH.baseSha?'unknown':'nothing saved yet'))+'</dd>'+
+    '<dt>Status</dt><dd'+(GH.lastError?' class="warn"':'')+'>'+esc($('#status').textContent)+'</dd></dl>'+
+    '<div class="inline"><button class="btn" id="syncNow">'+(GH.canEdit?'Save and check for updates':'Check for updates')+'</button></div>'+
+    '<p class="hint" style="margin-top:8px">'+(GH.canEdit?'Your changes save automatically a few seconds after you stop, and others’ changes appear within about 20 seconds. If two people edit at once, both sets of changes are kept; if you both change the same bar of the same part, the last save wins.':'The page checks for new changes every minute or two.')+'</p>';
+  info.innerHTML=h;
+  $('#syncNow').addEventListener('click',async()=>{ if(GH.canEdit && GH.dirty) await push(); else await poll(); });
+  $('#signBlock').hidden=false;
+  const signed=!!GH.login;
+  $('#signTitle').textContent = signed ? 'Your account' : 'Sign in to edit';
+  $('#signState').innerHTML = signed ? '<p>Signed in as <b>'+esc(GH.login)+'</b>. '+(GH.canEdit?'You can edit.':'<span class="warn">This account can’t edit this repository.</span>')+' <button class="linkbtn" id="signOut">Sign out</button></p>' : '';
+  if(signed) $('#signOut').addEventListener('click',signOut);
+  $('#signForm').hidden = signed && GH.canEdit;
+  $('#signMsg').textContent=GH.signMsg||'';
+  $('#signMsg').classList.toggle('warn',!!GH.signMsg && GH.signMsg!=='Checking…');
+  $('#importBlock').hidden=readOnly(); $('#resetBlock').hidden=readOnly();
+  $('#importLede').textContent='Load a backup file, such as one downloaded from an earlier copy of this tool. This replaces the shared copy for everyone.';
+  $('#resetLede').textContent='Erase every mark, repeat, note and roster for everyone. Parts, sections and tempo return to their defaults. Earlier versions stay in the data branch’s history on GitHub.';
+}
+function applyReadOnly(){
+  const ro=readOnly();
+  $('#roBanner').hidden=!ro;
+  document.querySelectorAll('#tab-setup input,#tab-setup select,#tab-setup button,#tab-report input,#tab-report select,#report button[data-useopt],#report button[data-addplayer],#report button[data-clearroster],#rep,#note,.tile,#undoBtn').forEach(el=>{
+    el.disabled = ro || (el.id==='undoBtn' && !undoStack.length);
+  });
+  document.querySelectorAll('.tile').forEach(el=>{ if(ro) el.setAttribute('aria-disabled','true'); else el.removeAttribute('aria-disabled'); });
+}
+async function initSync(){
+  setStatus(); renderShare();
+  if(!GH.on) return;
+  try{ GH.token=localStorage.getItem(TOKEN_KEY)||''; }catch(e){}
+  if(GH.token){
+    try{ await verifyToken(); }
+    catch(e){ if(e.status===401){ try{ localStorage.removeItem(TOKEN_KEY); }catch(_){} GH.token=''; GH.signMsg='Your saved token no longer works. Sign in again.'; } else GH.lastError=e.message; }
+  }
+  try{
+    const r=await fetchRemote(false);
+    if(r.missing){
+      if(GH.canEdit && (GH.dirty || S.updatedAt>0)){ GH.dirty=true; GH.ready=true; push(); }
+    } else {
+      GH.etag=r.etag; GH.meta=r.doc.meta||null;
+      const doc=sharedOf(migrate(r.doc));
+      if(GH.dirty && GH.canEdit){
+        if(r.sha!==GH.baseSha) applyShared(normalizeDoc(merge3(GH.base||{}, sharedOf(S), doc)));
+        GH.base=doc; GH.baseSha=r.sha; GH.ready=true;
+        push();
+      } else { GH.base=doc; GH.baseSha=r.sha; GH.dirty=false; applyShared(doc); }
+      saveLocal();
+    }
+    if(!GH.lastError) GH.lastError='';
+  }catch(e){ GH.lastError=e.message||String(e); }
+  GH.ready=true;
+  renderAll(); renderShare();
+  startPolling();
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(GH.dirty) push(); } else poll(); });
+  window.addEventListener('beforeunload',e=>{ if(GH.on && GH.canEdit && (GH.dirty||GH.pushing)){ push(); e.preventDefault(); e.returnValue=''; } });
+}
+
+/* ---------- mutations ---------- */
+const undoStack=[];
+function pushUndo(){
+  undoStack.push(JSON.stringify({events:S.events,bars:S.bars}));
+  if(undoStack.length>200) undoStack.shift();
+  $('#undoBtn').disabled=false;
+}
+function undo(){
+  if(readOnly()) return;
+  const s=undoStack.pop(); if(!s) return;
+  const o=JSON.parse(s); S.events=o.events; S.bars=o.bars;
+  commit();
+  $('#undoBtn').disabled=!undoStack.length;
+}
+function commit(){
+  if(readOnly()){ if(GH.base) applyShared(GH.base); renderAll(); return; }
+  invalidate(); markDirty(); renderCurrent();
+}
+
+function stateBefore(id,b){
+  const ev=S.events[id]||{}; let best=-1, v=0;
+  for(const k in ev){ const n=+k; if(n<b && n>best){ best=n; v=ev[k]; } }
+  return v?1:0;
+}
+function normalize(id){
+  const ev=S.events[id]; if(!ev) return;
+  normalizeEv(ev);
+  if(!Object.keys(ev).length) delete S.events[id];
+}
+function linkedIds(id){
+  const t=trackById(id); const l=t && (t.link||'').trim();
+  return l ? S.tracks.filter(x=>(x.link||'').trim()===l).map(x=>x.id) : [id];
+}
+function toggle(id){
+  if(readOnly()) return;
+  const ids=linkedIds(id), lead=ids[0];
+  pushUndo();
+  const b=S.cursor;
+  const has=(S.events[lead]||{})[b]!==undefined;
+  const val=stateBefore(lead,b)?0:1;
+  ids.forEach(x=>{
+    const ev=S.events[x]||(S.events[x]={});
+    if(has) delete ev[b]; else ev[b]=val;
+    normalize(x);
+  });
+  commit();
+  const tile=document.querySelector('.tile[data-id="'+CSS.escape(lead)+'"]');
+  if(tile){ tile.classList.add('hit'); setTimeout(()=>tile.classList.remove('hit'),180); }
+}
+function go(delta){ setBar(S.cursor+delta); }
+function setBar(b){
+  b=Math.min(Math.max(1,Math.round(b)||1),S.totalBars);
+  if(b===S.cursor) return;
+  S.cursor=b; saveLocal();
+  renderFollow();
+}
+function sectionStep(dir){
+  const c=comp(); const starts=c.secs.map(s=>s.start);
+  if(!starts.length) return;
+  if(dir>0){ const n=starts.find(s=>s>S.cursor); if(n) setBar(n); }
+  else { const p=starts.filter(s=>s<S.cursor); if(p.length){ const cur=c.secIdx[S.cursor]; const curStart=cur>=0?S.sections[cur].start:null; setBar(S.cursor===curStart || curStart==null ? p[p.length-1] : curStart); } }
+}
+
+/* ---------- FOLLOW view ---------- */
+let tileMap={};
+let tileGroups=[];
+function buildTiles(){
+  const box=$('#tiles'); box.innerHTML=''; tileMap={}; tileGroups=[];
+  const fams=[...FAMILIES, ...new Set(S.tracks.map(t=>t.family).filter(f=>!FAMILIES.includes(f)))];
+  fams.forEach(f=>{
+    const list=S.tracks.filter(t=>(t.family||'Other')===f);
+    if(!list.length) return;
+    const wrap=document.createElement('div'); wrap.className='fam';
+    const h=document.createElement('h3'); h.textContent=f; wrap.appendChild(h);
+    const grid=document.createElement('div'); grid.className='tiles';
+    const seen=new Set();
+    list.forEach(t=>{
+      if(seen.has(t.id)) return;
+      const ids=linkedIds(t.id); ids.forEach(x=>seen.add(x));
+      const members=ids.map(trackById);
+      const label=(t.link||'').trim() && ids.length>1 ? t.link.trim() : t.name;
+      const key=(members.find(m=>m.key)||{}).key||'';
+      const b=document.createElement('button');
+      b.className='tile'; b.type='button'; b.dataset.id=t.id;
+      b.innerHTML='<span class="nm"></span><span class="st"></span>'+(key?'<span class="key" aria-hidden="true"></span>':'');
+      b.querySelector('.nm').textContent=label;
+      if(key) b.querySelector('.key').textContent=key;
+      if(ids.length>1) b.title='Logs '+members.map(m=>m.name).join(' and ')+' together';
+      b.addEventListener('click',()=>toggle(t.id));
+      grid.appendChild(b); tileMap[t.id]=b;
+      tileGroups.push({lead:t.id,ids,label,key,el:b});
+    });
+    wrap.appendChild(grid); box.appendChild(wrap);
+  });
+}
+function renderFollow(){
+  const c=comp(), b=S.cursor;
+  $('#barNum').textContent=b;
+  $('#barTotal').textContent='of '+S.totalBars;
+  const si=c.secIdx[b];
+  if(si>=0){ const s=S.sections[si]; const r=c.ranges[s.id]; $('#secName').textContent=s.name||'Untitled section'; $('#secRange').textContent='Bars '+r[0]+'–'+r[1]+', bar '+(b-r[0]+1)+' of '+(r[1]-r[0]+1); }
+  else { $('#secName').textContent='No section'; $('#secRange').textContent='Add section start bars in Setup.'; }
+  const rep=$('#rep'), note=$('#note'), bd=S.bars[b]||{};
+  if(document.activeElement!==rep) rep.value=bd.rep||'';
+  if(document.activeElement!==note) note.value=bd.note||'';
+  const pr=parseRep(bd.rep);
+  let hint;
+  if(!pr.ok) hint='<span class="warn">Use a number (4), a range (4-6) or seconds (12s).</span>';
+  else if(c.unk[b]) hint='Set a tempo in Setup to see seconds.';
+  else hint='This bar lasts about '+esc(fmtSec({min:c.dMin[b],max:c.dMax[b]}))+'.';
+  $('#durHint').innerHTML=hint;
+  let sounding=0; const changes=[];
+  S.tracks.forEach(t=>{ if(c.on[t.id][b]) sounding++; });
+  tileGroups.forEach(g=>{
+    const el=g.el;
+    const isOn=g.ids.some(id=>c.on[id][b]);
+    const ev=(S.events[g.lead]||{})[b];
+    el.classList.toggle('on',isOn);
+    el.setAttribute('aria-pressed',isOn?'true':'false');
+    const st=el.querySelector('.st');
+    if(ev===1){ st.innerHTML='<span class="chg in">Starts here</span>'; changes.push(g.label+' start'+(g.ids.length>1?'':'s')); }
+    else if(ev===0){ st.innerHTML='<span class="chg out">Stops here</span>'; changes.push(g.label+' stop'+(g.ids.length>1?'':'s')); }
+    else st.textContent=isOn?'Playing':'Silent';
+    el.setAttribute('aria-label',g.label+', '+(isOn?'playing':'silent')+(ev===1?', starts at this bar':ev===0?', stops at this bar':'')+(g.key?'. Key '+g.key:''));
+  });
+  const marked=Object.keys(S.events).filter(id=>trackById(id)).length;
+  $('#nowLine').innerHTML='<span><b>'+sounding+'</b> playing in this bar</span><span class="dim">'+marked+' of '+S.tracks.length+' parts logged</span>';
+  $('#hereLine').textContent = changes.length ? 'At this bar: '+changes.join(', ')+'.' : (bd.note ? 'Note: '+bd.note : '');
+  const sj=$('#secJump');
+  if(document.activeElement!==sj) sj.value = si>=0 ? S.sections[si].id : '';
+  $('#undoBtn').disabled=!undoStack.length;
+  renderTimeline();
+}
+function buildSecJump(){
+  const sj=$('#secJump'); sj.innerHTML='<option value="">Choose…</option>';
+  S.sections.forEach(s=>{ const o=document.createElement('option'); o.value=s.id; o.textContent=(s.name||'Untitled')+(Number.isFinite(s.start)?' (bar '+s.start+')':' (no start bar)'); if(!Number.isFinite(s.start)) o.disabled=true; sj.appendChild(o); });
+}
+
+/* timeline */
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+let tlGeom=null;
+const FAMILY_VAR={'Clarinets':'--tl-cl','Maracas':'--tl-mrc','Xylophones':'--tl-xyl','Vibraphone':'--tl-vib','Marimbas':'--tl-mar','Pianos':'--tl-pno','Voices':'--tl-vox','Strings':'--tl-str'};
+function familyColor(f){ return cssVar(FAMILY_VAR[f]||'--tl-other'); }
+function renderTimeline(){
+  const cv=$('#tl'); if(!cv || tab!=='follow') return;
+  const c=comp();
+  const W=Math.max(300, cv.parentElement.clientWidth-12);
+  const rows=S.tracks.length, labelW=58, rowH=11, top=20;
+  const H=top+rows*rowH+4;
+  const dpr=window.devicePixelRatio||1;
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+  cv.style.height=H+'px';
+  const g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+  const col={ink:cssVar('--ink'),ink2:cssVar('--ink-2'),rule:cssVar('--rule-2'),blue:cssVar('--blue'),red:cssVar('--red'),wash:cssVar('--gray-wash'),sheet:cssVar('--sheet')};
+  g.fillStyle=col.sheet; g.fillRect(0,0,W,H);
+  let r0=1, r1=c.N;
+  if(S.zoom==='near'){ const half=48; r0=Math.max(1,S.cursor-half); r1=Math.min(c.N,r0+half*2); r0=Math.max(1,r1-half*2); }
+  const plotW=W-labelW-2, n=r1-r0+1, bw=plotW/n;
+  const x=b=>labelW+(b-r0)*bw;
+  tlGeom={labelW,r0,r1,bw,W};
+  $('#tlTitle').textContent = S.zoom==='near' ? 'Bars '+r0+'–'+r1 : 'Whole piece';
+  // sections
+  g.font='600 11px Archivo, Arial, sans-serif'; g.textBaseline='middle';
+  c.secs.forEach((s,k)=>{
+    const rg=c.ranges[s.id]; if(!rg) return;
+    const a=Math.max(rg[0],r0), b=Math.min(rg[1],r1); if(a>b) return;
+    if(k%2===1){ g.fillStyle=col.wash; g.fillRect(x(a),0,(b-a+1)*bw,H); }
+    g.fillStyle=col.rule; g.fillRect(x(rg[0])-0.5,0,1,H);
+    const label=s.name||''; const w=(b-a+1)*bw;
+    if(w>g.measureText(label).width+6){ g.fillStyle=col.ink2; g.fillText(label,x(a)+3,top/2); }
+  });
+  // rows
+  S.tracks.forEach((t,i)=>{
+    const y=top+i*rowH;
+    g.fillStyle=col.ink2; g.font='500 10px Archivo, Arial, sans-serif';
+    g.fillText(t.short||t.name,2,y+rowH/2);
+    g.fillStyle=col.rule; g.fillRect(labelW,y+rowH-0.5,plotW,0.5);
+    g.fillStyle=familyColor(t.family);
+    (c.spans[t.id]||[]).forEach(([a,b])=>{
+      const aa=Math.max(a,r0), bb=Math.min(b,r1); if(aa>bb) return;
+      g.fillRect(x(aa),y+2,Math.max(1,(bb-aa+1)*bw),rowH-4);
+    });
+  });
+  // cursor
+  if(S.cursor>=r0 && S.cursor<=r1){
+    g.fillStyle=col.red; g.globalAlpha=.18; g.fillRect(x(S.cursor),top,Math.max(1,bw),rows*rowH); g.globalAlpha=1;
+    g.fillRect(x(S.cursor)+Math.max(1,bw)/2-1,0,2,H);
+  }
+}
+
+/* ---------- SETUP view ---------- */
+function numOrNull(v){ const n=parseFloat(v); return Number.isFinite(n)&&n>0 ? n : null; }
+function renderSetup(){
+  $('#totalBars').value=S.totalBars;
+  $('#tempo').value=S.tempo??'';
+  $('#beats').value=S.beatsPerBar??'';
+  const c=comp();
+  // sections
+  let h='<div class="scroll"><table class="tbl"><thead><tr><th>Section</th><th>First bar</th><th>Bars</th><th>Tempo override</th><th>Beats per bar override</th><th></th></tr></thead><tbody>';
+  S.sections.forEach((s,i)=>{
+    const rg=c.ranges[s.id];
+    h+='<tr data-sec="'+i+'"><td><input data-f="name" value="'+esc(s.name)+'" aria-label="Section name"></td>'+
+      '<td class="num"><input data-f="start" type="number" min="1" value="'+(s.start??'')+'" aria-label="First bar of '+esc(s.name)+'"></td>'+
+      '<td class="dim">'+(rg?rg[0]+'–'+rg[1]:'—')+'</td>'+
+      '<td class="num"><input data-f="tempo" type="number" min="1" step="any" value="'+(s.tempo??'')+'" placeholder="'+(S.tempo??'')+'" aria-label="Tempo override"></td>'+
+      '<td class="num"><input data-f="beats" type="number" min="0.5" step="any" value="'+(s.beats??'')+'" placeholder="'+(S.beatsPerBar??'')+'" aria-label="Beats per bar override"></td>'+
+      '<td><button class="btn small danger" data-delsec="'+i+'">Remove</button></td></tr>';
+  });
+  h+='</tbody></table></div>';
+  $('#secTable').innerHTML=h;
+  const starts=S.sections.map(s=>s.start).filter(Number.isFinite);
+  let sw='';
+  if(starts.some((v,i)=>i&&v<=starts[i-1])) sw='Start bars aren’t in order. Sections are placed by start bar, so check for typos.';
+  if(starts.some(v=>v>S.totalBars)) sw='A start bar is past the last bar.';
+  $('#secWarn').textContent=sw;
+  // tracks
+  let t='<div class="scroll"><table class="tbl"><thead><tr><th>Name</th><th>Short name</th><th>Key</th><th>Row</th><th>Shared button</th><th>Station</th><th>Own part only</th><th></th></tr></thead><tbody>';
+  const fams=[...new Set([...FAMILIES, ...S.tracks.map(x=>x.family)])];
+  S.tracks.forEach((tr,i)=>{
+    t+='<tr data-tr="'+i+'"><td><input data-f="name" value="'+esc(tr.name)+'" aria-label="Part name"></td>'+
+      '<td style="width:110px"><input data-f="short" value="'+esc(tr.short)+'" aria-label="Short name"></td>'+
+      '<td class="key"><input data-f="key" maxlength="1" value="'+esc(tr.key)+'" aria-label="Key for '+esc(tr.name)+'"></td>'+
+      '<td style="width:170px"><select data-f="family" aria-label="Group">'+fams.map(f=>'<option'+(f===tr.family?' selected':'')+'>'+esc(f)+'</option>').join('')+'</select></td>'+
+      '<td style="width:150px"><input data-f="link" value="'+esc(tr.link)+'" placeholder="—" aria-label="Shared button for '+esc(tr.name)+'"></td>'+
+      '<td style="width:90px"><input data-f="station" value="'+esc(tr.station)+'" placeholder="—" aria-label="Station"></td>'+
+      '<td style="text-align:center"><input data-f="fixed" type="checkbox"'+(tr.fixed?' checked':'')+' aria-label="'+esc(tr.name)+' plays only its own part"></td>'+
+      '<td><button class="btn small danger" data-deltr="'+i+'">Remove</button></td></tr>';
+  });
+  t+='</tbody></table></div>';
+  $('#trackTable').innerHTML=t;
+  const keys=S.tracks.map(x=>(x.key||'').toLowerCase()).filter(Boolean);
+  const dup=keys.filter((k,i)=>keys.indexOf(k)!==i);
+  const reserved=keys.filter(k=>[' ','[',']'].includes(k));
+  $('#keyWarn').textContent = dup.length ? 'Key “'+dup[0]+'” is used twice. Only the first part will respond.' : reserved.length ? '[ and ] are used to jump sections.' : '';
+  renderRules();
+}
+function pairSelect(id){
+  return '<select id="'+id+'">'+S.tracks.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>').join('')+'</select>';
+}
+function renderRules(){
+  const list=(arr,kind)=> arr.length ? '<ul style="margin:6px 0 0;padding-left:18px">'+arr.map((p,i)=>'<li>'+esc(tname(p[0]))+' and '+esc(tname(p[1]))+' <button class="linkbtn" data-delrule="'+kind+':'+i+'">Remove</button></li>').join('')+'</ul>' : '<p class="hint">None yet.</p>';
+  $('#rulesBox').innerHTML=
+    '<h3>Same player</h3>'+list(S.rules.locks,'locks')+
+    '<div class="inline" style="margin-top:8px"><div style="width:190px">'+pairSelect('lockA')+'</div><span>and</span><div style="width:190px">'+pairSelect('lockB')+'</div><button class="btn small" data-addrule="locks">Add</button></div>'+
+    '<h3 style="margin-top:18px">Never together</h3>'+list(S.rules.nevers,'nevers')+
+    '<div class="inline" style="margin-top:8px"><div style="width:190px">'+pairSelect('neverA')+'</div><span>and</span><div style="width:190px">'+pairSelect('neverB')+'</div><button class="btn small" data-addrule="nevers">Add</button></div>';
+}
+function removeTrack(i){
+  const id=S.tracks[i].id;
+  S.tracks.splice(i,1);
+  delete S.events[id];
+  S.rules.locks=S.rules.locks.filter(p=>p[0]!==id&&p[1]!==id);
+  S.rules.nevers=S.rules.nevers.filter(p=>p[0]!==id&&p[1]!==id);
+  delete S.roster.assign[id];
+  buildTiles(); commit();
+}
+
+/* ---------- REPORT view ---------- */
+function statusCell(a,b){
+  if(a===b) return {cls:'self',txt:''};
+  const c=comp();
+  if(!c.spans[a].length || !c.spans[b].length) return {cls:'na',txt:'·'};
+  const p=pairInfo(a,b);
+  if(p.status==='clash') return {cls:'clash',txt:'×'};
+  if(p.status==='never') return {cls:'never',txt:'–'};
+  const w=p.worst;
+  let txt='✓';
+  if(w){ txt = w.sec.known ? fmtNum(w.sec.min) : String(w.bars)+'b'; }
+  return {cls:p.status,txt};
+}
+function pairSentence(a,b){
+  const c=comp();
+  if(!c.spans[a].length || !c.spans[b].length) return esc(tname(a))+' / '+esc(tname(b))+': one of these parts has no bars logged yet.';
+  const p=pairInfo(a,b);
+  let s='<strong>'+esc(tname(a))+' / '+esc(tname(b))+':</strong> ';
+  if(p.status==='clash') s+='they play together for '+plural(p.overlapBars,'bar')+' ('+p.ranges.slice(0,4).map(r=>r[0]===r[1]?'bar '+r[0]:'bars '+r[0]+'–'+r[1]).join(', ')+(p.ranges.length>4?', and more':'')+'), so one player can’t cover both.';
+  else if(p.status==='never') s+= p.dedicated ? esc(tname(p.dedicated))+' plays only its own part.' : 'marked never together in Setup.';
+  else {
+    s+= p.transitions ? plural(p.transitions,'change')+' between them. Tightest: '+esc(gapText(p.worst,true))+'.' : 'no changes needed between them.';
+    if(p.status==='tight') s+=' <span class="pill tight">'+plural(p.fails,'change')+' faster than your rules allow</span>';
+    else s+=' <span class="pill ok">Doubling works</span>';
+    if(p.worst && !p.worst.sec.known) s+=' <span class="dim">Seconds unknown; set a tempo in Setup.</span>';
+  }
+  if(p.locked) s+=' <span class="dim">(Same player rule)</span>';
+  return s;
+}
+function playerRowHTML(name, st, idx, interactive){
+  const parts=st.ids.map(id=>esc(tname(id))).join(' + ');
+  const worst=st.worst ? esc(gapText(st.worst,true)) : '<span class="dim">no changes</span>';
+  const prob=st.problems.length ? '<div class="warn" style="font-size:13px;margin-top:2px">'+st.problems.map(esc).join('<br>')+'</div>' : '';
+  const nameCell = interactive ? '<input data-pname="'+idx+'" value="'+esc(name)+'" aria-label="Player name" style="min-width:120px">' : esc(name);
+  return '<tr><td>'+nameCell+'</td><td><span class="parts">'+(parts||'<span class="dim">no parts</span>')+'</span>'+prob+'</td><td>'+st.switches+'</td><td>'+worst+'</td></tr>';
+}
+function optionsHTML(res, interactive){
+  let h='<div class="block"><h2>Roster options for '+plural(S.target,'player')+'</h2><p class="lede">Each option assigns every logged part to a player so that no one has to play two things at once or change faster than your rules allow.</p>';
+  if(res.optionNote) h+='<p>'+esc(res.optionNote)+'</p>';
+  if(res.unused.length) h+='<p class="hint">Not included yet (no bars logged): '+res.unused.map(tname).map(esc).join(', ')+'.</p>';
+  res.options.forEach((o,oi)=>{
+    const doublers=o.players.filter(p=>p.ids.length>1).length;
+    h+='<div class="opt"><div class="opthead"><h3>Option '+(oi+1)+'</h3><span class="dim">'+plural(doublers,'player')+' doubling, '+plural(o.sw,'instrument change')+'. Tightest change: '+(o.worst?esc(gapText(o.worst,true)):'none')+'</span>'+
+      (interactive?'<button class="btn small" data-useopt="'+oi+'">Use as my roster</button>':'')+'</div>';
+    h+='<div class="scroll"><table class="tbl"><thead><tr><th>Player</th><th>Parts</th><th>Changes</th><th>Tightest change</th></tr></thead><tbody>';
+    const order=o.players.map((p,i)=>({p,i})).sort((a,b)=>(b.p.ids.length>1)-(a.p.ids.length>1) || S.tracks.findIndex(t=>t.id===a.p.ids[0])-S.tracks.findIndex(t=>t.id===b.p.ids[0]));
+    order.forEach(({p},k)=>{ h+=playerRowHTML('Player '+(k+1),p,k,false); });
+    h+='</tbody></table></div></div>';
+  });
+  return h+'</div>';
+}
+function rosterHTML(interactive){
+  const c=comp();
+  const names=S.roster.names;
+  while(names.length<S.target) names.push('Player '+(names.length+1));
+  const assigned={}; Object.entries(S.roster.assign).forEach(([id,pi])=>{ if(trackById(id) && pi!=null && pi<names.length) (assigned[pi]=assigned[pi]||[]).push(id); });
+  const cache=new Map();
+  let h='<div class="block"><h2>Your roster</h2><p class="lede">Assign parts to the players you’re contracting. Problems show up in red as you go.</p>';
+  if(interactive){
+    h+='<div class="scroll"><table class="tbl"><thead><tr><th>Part</th><th>Player</th><th>Bars logged</th></tr></thead><tbody>';
+    S.tracks.forEach(t=>{
+      const cur=S.roster.assign[t.id];
+      const nb=(c.spans[t.id]||[]).reduce((s,[a,b])=>s+b-a+1,0);
+      h+='<tr><td>'+esc(t.name)+'</td><td style="width:220px"><select data-assign="'+esc(t.id)+'" aria-label="Player for '+esc(t.name)+'"><option value="">Unassigned</option>'+names.map((n,i)=>'<option value="'+i+'"'+(cur===i?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></td><td class="dim">'+(nb||'—')+'</td></tr>';
+    });
+    h+='</tbody></table></div><div class="inline" style="margin:10px 0 16px"><button class="btn small" data-addplayer="1">Add player</button><button class="btn small" data-clearroster="1">Clear assignments</button></div>';
+  }
+  h+='<div class="scroll"><table class="tbl"><thead><tr><th>Player</th><th>Parts</th><th>Changes</th><th>Tightest change</th></tr></thead><tbody>';
+  names.forEach((n,i)=>{ h+=playerRowHTML(n, playerStats(assigned[i]||[],cache), i, interactive); });
+  h+='</tbody></table></div>';
+  const un=S.tracks.filter(t=>c.spans[t.id].length && (S.roster.assign[t.id]==null || S.roster.assign[t.id]>=names.length));
+  if(un.length) h+='<p class="hint warn" style="margin-top:8px">Logged parts with no player: '+un.map(t=>esc(t.name)).join(', ')+'.</p>';
+  return h+'</div>';
+}
+function candidatesHTML(res){
+  let h='<div class="block"><h2>Possible doublings by part</h2><p class="lede">For each part, every other part the same player could also cover, roomiest changeover first. “Fast change” pairs work only if you relax the changeover rules.</p>';
+  res.used.forEach(a=>{
+    if(trackById(a).fixed){ h+='<div class="cand"><div class="who">'+esc(tname(a))+'</div><div class="dim">Plays only this part.</div></div>'; return; }
+    const ok=[], tight=[];
+    res.used.forEach(b=>{
+      if(a===b) return;
+      const p=pairInfo(a,b);
+      if(p.status==='ok') ok.push({b,p}); else if(p.status==='tight') tight.push({b,p});
+    });
+    const sorter=(x,y)=> (!x.p.worst?-1:!y.p.worst?1:compareGap(y.p.worst,x.p.worst));
+    ok.sort(sorter); tight.sort(sorter);
+    const item=({b,p})=>'<li><strong>'+esc(tname(b))+'</strong> <span class="dim">'+(p.worst?esc(gapText(p.worst))+(p.transitions>1?' ('+p.transitions+' changes)':''):'no changes needed')+(p.locked?', same player rule':'')+'</span></li>';
+    h+='<div class="cand"><div class="who">'+esc(tname(a))+'</div><div>'+
+      (ok.length?'<ul>'+ok.map(item).join('')+'</ul>':'<span class="dim">No clean doublings.</span>')+
+      (tight.length?'<div style="margin-top:6px"><span class="pill tight">Fast change</span><ul>'+tight.map(item).join('')+'</ul></div>':'')+
+      '</div></div>';
+  });
+  return h+'</div>';
+}
+function matrixHTML(interactive){
+  const ids=S.tracks.map(t=>t.id);
+  let h='<div class="block"><h2>Every pair at a glance</h2><p class="lede">Numbers are the tightest changeover in seconds (or silent bars, marked “b”, when there’s no tempo).'+(interactive?' Select a square for details.':'')+'</p>';
+  h+='<div class="legend"><span class="pill ok">Can double</span><span class="pill tight">Change too fast</span><span class="pill clash">× Play together</span><span class="pill never">– Own part only, or never together</span><span class="dim">· Not logged yet</span></div>';
+  h+='<div class="scroll"><table class="matrix"><thead><tr><th></th>'+ids.map(id=>'<th scope="col">'+esc(tshort(id))+'</th>').join('')+'</tr></thead><tbody>';
+  ids.forEach(a=>{
+    h+='<tr><th scope="row" style="text-align:right">'+esc(tshort(a))+'</th>';
+    ids.forEach(b=>{ const s=statusCell(a,b); h+='<td class="'+s.cls+'"'+(s.cls!=='self'&&s.cls!=='na'&&interactive?' data-pair="'+esc(a)+'|'+esc(b)+'" tabindex="0"':'')+'>'+esc(s.txt)+'</td>'; });
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>'+(interactive?'<div id="matrixDetail" aria-live="polite"></div>':'')+'</div>';
+  return h;
+}
+function sectionsGridHTML(){
+  const c=comp(); const secs=c.secs.filter(s=>c.ranges[s.id]);
+  if(!secs.length) return '';
+  let h='<div class="block"><h2>Parts in each section</h2><p class="lede">Bars played in each section.</p><div class="scroll"><table class="tbl secgrid"><thead><tr><th>Part</th>'+secs.map(s=>'<th>'+esc(s.name)+'</th>').join('')+'</tr></thead><tbody>';
+  S.tracks.forEach(t=>{
+    h+='<tr><td>'+esc(t.name)+'</td>';
+    secs.forEach(s=>{ const [a,b]=c.ranges[s.id]; let n=0; for(let i=a;i<=b;i++) n+=c.on[t.id][i]; h+= n ? '<td class="hit">'+n+'</td>' : '<td class="dim">·</td>'; });
+    h+='</tr>';
+  });
+  return h+'</tbody></table></div></div>';
+}
+function summaryHTML(res){
+  const c=comp();
+  let h='<div class="block"><p class="summary">';
+  h+='<strong>'+res.used.length+'</strong> of '+S.tracks.length+' parts logged. ';
+  h+='Fewest players who can cover them: <strong>'+res.k+'</strong>'+(res.kExact?'':' (best found)')+'.';
+  h+='</p>';
+  if(!c.anyKnown) h+='<p class="hint">No tempo is set, so changeovers are judged in silent bars only. Add a tempo and repeats to check seconds.</p>';
+  res.warnings.forEach(w=>{ h+='<p class="warn">'+esc(w)+'</p>'; });
+  return h+'</div>';
+}
+function renderReport(){
+  $('#minBars').value=S.rules.minBars;
+  $('#minSec').value=S.rules.minSec;
+  $('#crossExtra').value=S.rules.crossExtra;
+  if(document.activeElement!==$('#target')) $('#target').value=S.target;
+  const res=analyze();
+  const box=$('#report');
+  if(!res.used.length){
+    box.innerHTML='<div class="empty"><strong>Nothing logged yet</strong>Open Follow score, move through the bars and tap a part’s key each time it starts or stops. The doubling report builds itself as you go.</div>';
+    return;
+  }
+  box.innerHTML=summaryHTML(res)+optionsHTML(res,true)+rosterHTML(true)+candidatesHTML(res)+matrixHTML(true)+sectionsGridHTML();
+}
+
+/* ---------- exports ---------- */
+function offerFile(filename, data){
+  try{
+    const type = /\.json$/.test(filename)?'application/json':/\.csv$/.test(filename)?'text/csv':'text/html';
+    const url=URL.createObjectURL(new Blob([data],{type:type+';charset=utf-8'}));
+    const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+  }catch(e){
+    openModal('Copy '+filename, 'Your browser blocked the download. Select all, copy, and paste into a file named '+filename+'.', data, 'Select all', ()=>{ const t=$('#modalText'); t.focus(); t.select(); });
+  }
+}
+function csvCell(v){ const s=String(v==null?'':v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function barCSV(){
+  const c=comp();
+  const head=['bar','section','repeats','seconds_low','seconds_high','note',...S.tracks.map(t=>t.name)];
+  const lines=[head.map(csvCell).join(',')];
+  for(let b=1;b<=c.N;b++){
+    const si=c.secIdx[b], bd=S.bars[b]||{};
+    lines.push([b, si>=0?S.sections[si].name:'', bd.rep||'', c.unk[b]?'':fmtNum(c.dMin[b]), c.unk[b]?'':fmtNum(c.dMax[b]), bd.note||'', ...S.tracks.map(t=>c.on[t.id][b])].map(csvCell).join(','));
+  }
+  return lines.join('\n');
+}
+function reportDoc(){
+  const res=analyze();
+  const css='body{font-family:Archivo,Arial,sans-serif;color:#1B2125;max-width:1000px;margin:24px auto;padding:0 20px;font-size:14px}h1{font-size:22px}h2{font-size:17px;margin:0 0 6px}h3{font-size:14px;margin:0}.block{border-top:2px solid #1B2125;padding:12px 0 18px}.lede,.hint,.dim{color:#55616A}.warn{color:#B92D38}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #DDE3E3;padding:5px 6px;text-align:left;vertical-align:top}.pill{padding:1px 6px;border-radius:3px;font-size:12px;font-weight:600}.ok{background:#D6ECE0;color:#2B7654}.tight{background:#F4E6C6;color:#8F5F06}.clash{background:#F5D9DB;color:#B92D38}.never{background:#E1E5E5}.matrix td{width:30px;text-align:center;font-size:11px;border:1px solid #fff}.matrix thead th{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px}.cand{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid #DDE3E3;padding:6px 0}.cand ul{margin:0;padding:0;list-style:none}.who,.parts{font-weight:700}.opt{margin-top:12px}.secgrid td{text-align:center}.secgrid td.hit{background:#DAE3F7}@media print{.block{break-inside:avoid-page}}';
+  const d=new Date();
+  const body = res.used.length
+    ? summaryHTML(res)+optionsHTML(res,false)+rosterHTML(false)+candidatesHTML(res)+matrixHTML(false)+sectionsGridHTML()
+    : '<p>No parts logged yet.</p>';
+  const rules='<p class="hint">Changeover rules: at least '+plural(nonneg(S.rules.minBars),'silent bar')+' and '+nonneg(S.rules.minSec)+' s'+(nonneg(S.rules.crossExtra)?', plus '+nonneg(S.rules.crossExtra)+' s to change stations':'')+'. Generated '+d.toLocaleString()+'.</p>';
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Music for 18 Musicians doubling report</title><style>'+css+'</style></head><body><h1>Music for 18 Musicians: doubling report</h1>'+rules+body+'</body></html>';
+}
+
+/* ---------- modal ---------- */
+let modalAct=null;
+function openModal(title,hint,text,actLabel,act){
+  $('#modalTitle').textContent=title; $('#modalHint').textContent=hint;
+  const t=$('#modalText'); t.value=text||''; t.readOnly=!!text;
+  $('#modalAction').textContent=actLabel; modalAct=act;
+  $('#modal').hidden=false; t.focus();
+}
+function closeModal(){ $('#modal').hidden=true; modalAct=null; }
+
+function importState(obj){
+  if(!obj || !Array.isArray(obj.tracks) || typeof obj.events!=='object') throw new Error('This file isn’t a doubling-map backup.');
+  if(readOnly()) throw new Error('Sign in to import.');
+  const keep={cursor:S.cursor, zoom:S.zoom};
+  S=migrate(Object.assign({},obj,keep)); undoStack.length=0;
+  invalidate(); markDirty(); renderAll();
+}
+
+/* ---------- rendering dispatch ---------- */
+function renderCurrent(){
+  if(tab==='follow') renderFollow();
+  else if(tab==='setup') renderSetup();
+  else if(tab==='report') renderReport();
+  else { setStatus(); renderShare(); }
+  applyReadOnly();
+}
+function renderAll(){ buildTiles(); buildSecJump(); document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.zoom===S.zoom))); renderCurrent(); setStatus(); }
+function showTab(name){
+  tab=name;
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
+  document.querySelectorAll('.panel').forEach(p=>p.hidden = p.id!=='tab-'+name);
+  if(name==='follow'){ buildSecJump(); }
+  renderCurrent();
+}
+$('#roSignIn').addEventListener('click',()=>{ showTab('data'); setTimeout(()=>$('#tokenIn').focus(),0); });
+$('#signIn').addEventListener('click',signIn);
+$('#tokenIn').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); signIn(); } });
+
+/* ---------- events ---------- */
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+$('#prevBar').addEventListener('click',()=>go(-1));
+$('#nextBar').addEventListener('click',()=>go(1));
+$('#jump').addEventListener('change',e=>{ const v=parseInt(e.target.value,10); if(v) setBar(v); e.target.value=''; });
+$('#secJump').addEventListener('change',e=>{ const s=S.sections.find(x=>x.id===e.target.value); if(s && Number.isFinite(s.start)) setBar(s.start); e.target.blur(); });
+let repPushed=false;
+$('#rep').addEventListener('focus',()=>{repPushed=false;});
+$('#rep').addEventListener('input',e=>{
+  if(!repPushed){ pushUndo(); repPushed=true; }
+  const b=S.cursor; const v=e.target.value.trim();
+  const bd=S.bars[b]||{}; if(v) bd.rep=v; else delete bd.rep;
+  if(Object.keys(bd).length) S.bars[b]=bd; else delete S.bars[b];
+  commit();
+});
+$('#note').addEventListener('input',e=>{
+  const b=S.cursor; const v=e.target.value;
+  const bd=S.bars[b]||{}; if(v.trim()) bd.note=v; else delete bd.note;
+  if(Object.keys(bd).length) S.bars[b]=bd; else delete S.bars[b];
+  if(readOnly()) return;
+  markDirty();
+});
+$('#undoBtn').addEventListener('click',undo);
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  S.zoom=b.dataset.zoom; saveLocal();
+  document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  renderTimeline();
+}));
+$('#tl').addEventListener('click',e=>{
+  if(!tlGeom) return;
+  const rect=e.target.getBoundingClientRect(); const x=e.clientX-rect.left;
+  if(x<tlGeom.labelW) return;
+  setBar(tlGeom.r0+Math.floor((x-tlGeom.labelW)/tlGeom.bw));
+});
+let rz=null; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(renderTimeline,80); });
+if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',renderTimeline);
+
+document.addEventListener('keydown',e=>{
+  if(!$('#modal').hidden){ if(e.key==='Escape') closeModal(); return; }
+  if(tab!=='follow') return;
+  const tag=e.target.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'){
+    if(e.key==='Escape' || (e.key==='Enter' && tag==='INPUT')){ e.target.blur(); e.preventDefault(); }
+    return;
+  }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='z'){ e.preventDefault(); undo(); return; }
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  if(e.key===' '){ e.preventDefault(); go(e.shiftKey?-1:1); return; }
+  if(e.key==='ArrowRight'){ e.preventDefault(); go(1); return; }
+  if(e.key==='ArrowLeft'){ e.preventDefault(); go(-1); return; }
+  if(e.key===']'){ e.preventDefault(); sectionStep(1); return; }
+  if(e.key==='['){ e.preventDefault(); sectionStep(-1); return; }
+  const k=e.key.toLowerCase();
+  if(k.length!==1) return;
+  const t=S.tracks.find(t=>t.key && t.key.toLowerCase()===k);
+  if(t){ e.preventDefault(); toggle(t.id); }
+});
+
+/* setup events */
+$('#totalBars').addEventListener('change',e=>{ const v=parseInt(e.target.value,10); if(v>0){ S.totalBars=v; S.cursor=Math.min(S.cursor,v); commit(); } else e.target.value=S.totalBars; });
+$('#tempo').addEventListener('change',e=>{ S.tempo=numOrNull(e.target.value); commit(); });
+$('#beats').addEventListener('change',e=>{ S.beatsPerBar=numOrNull(e.target.value); commit(); });
+$('#secTable').addEventListener('change',e=>{
+  const tr=e.target.closest('tr[data-sec]'); if(!tr) return;
+  const s=S.sections[+tr.dataset.sec], f=e.target.dataset.f;
+  if(f==='name') s.name=e.target.value.trim()||'Untitled';
+  else if(f==='start'){ const v=parseInt(e.target.value,10); s.start = v>0 ? v : null; }
+  else s[f]=numOrNull(e.target.value);
+  buildSecJump(); commit();
+});
+$('#secTable').addEventListener('click',e=>{
+  const b=e.target.closest('[data-delsec]'); if(!b) return;
+  S.sections.splice(+b.dataset.delsec,1); buildSecJump(); commit();
+});
+$('#secFill').addEventListener('click',()=>{
+  const nums=($('#secPaste').value.match(/\d+/g)||[]).map(Number);
+  const hint=$('#secPasteHint');
+  if(!nums.length){ hint.textContent='Enter at least one bar number.'; return; }
+  nums.slice(0,S.sections.length).forEach((n,i)=>{ S.sections[i].start = n>0 ? n : null; });
+  hint.textContent = nums.length===S.sections.length ? 'Filled in all '+nums.length+' sections.'
+    : nums.length<S.sections.length ? 'Filled in the first '+nums.length+' of '+S.sections.length+' sections.'
+    : 'Filled in all '+S.sections.length+' sections. The extra '+plural(nums.length-S.sections.length,'number')+' were left out; add sections first if you need them.';
+  $('#secPaste').value='';
+  buildSecJump(); commit();
+});
+$('#addSec').addEventListener('click',()=>{ S.sections.push({id:'s'+Date.now().toString(36),name:'New section',start:null,tempo:null,beats:null}); buildSecJump(); commit(); });
+$('#trackTable').addEventListener('change',e=>{
+  const tr=e.target.closest('tr[data-tr]'); if(!tr) return;
+  const t=S.tracks[+tr.dataset.tr], f=e.target.dataset.f;
+  let v=e.target.value;
+  if(f==='fixed') v=e.target.checked;
+  else if(f==='key') v=v.trim().slice(0,1).toLowerCase();
+  else if(f==='name') v=v.trim()||t.name;
+  else v=v.trim();
+  t[f]=v; buildTiles(); commit();
+});
+const armed=new Map();
+function armOrRun(btn,key,label,run){
+  if(armed.get(key)){ armed.delete(key); run(); return; }
+  armed.set(key,true); const old=btn.textContent; btn.textContent=label; btn.classList.add('armed');
+  setTimeout(()=>{ if(armed.get(key)){ armed.delete(key); if(btn.isConnected){ btn.textContent=old; btn.classList.remove('armed'); } } },4000);
+}
+$('#trackTable').addEventListener('click',e=>{
+  const b=e.target.closest('[data-deltr]'); if(!b) return;
+  const i=+b.dataset.deltr; const t=S.tracks[i];
+  const hasData=!!S.events[t.id];
+  if(!hasData) return removeTrack(i);
+  armOrRun(b,'tr:'+t.id,'Click again to remove '+t.short+' and its marks',()=>removeTrack(i));
+});
+$('#addTrack').addEventListener('click',()=>{
+  const id='t'+Date.now().toString(36);
+  S.tracks.push({id,name:'New part',short:'New',key:'',family:'Other',station:''});
+  buildTiles(); commit();
+});
+$('#rulesBox').addEventListener('click',e=>{
+  const add=e.target.closest('[data-addrule]');
+  if(add){
+    const kind=add.dataset.addrule, pre=kind==='locks'?'lock':'never';
+    const a=$('#'+pre+'A').value, b=$('#'+pre+'B').value;
+    if(a && b && a!==b && !isPair(S.rules[kind],a,b)){ S.rules[kind].push([a,b]); commit(); }
+    return;
+  }
+  const del=e.target.closest('[data-delrule]');
+  if(del){ const [kind,i]=del.dataset.delrule.split(':'); S.rules[kind].splice(+i,1); commit(); }
+});
+
+/* report events */
+['minBars','minSec','crossExtra'].forEach(id=>$('#'+id).addEventListener('change',e=>{ S.rules[id]=nonneg(e.target.value); commit(); }));
+$('#target').addEventListener('change',e=>{ const v=parseInt(e.target.value,10); if(v>0 && v<=200){ S.target=v; commit(); } else e.target.value=S.target; });
+$('#report').addEventListener('click',e=>{
+  const use=e.target.closest('[data-useopt]');
+  if(use){
+    const o=R && R.options[+use.dataset.useopt]; if(!o) return;
+    const order=o.players.map((p,i)=>({p,i})).sort((a,b)=>(b.p.ids.length>1)-(a.p.ids.length>1) || S.tracks.findIndex(t=>t.id===a.p.ids[0])-S.tracks.findIndex(t=>t.id===b.p.ids[0]));
+    S.roster.assign={};
+    while(S.roster.names.length<order.length) S.roster.names.push('Player '+(S.roster.names.length+1));
+    order.forEach(({p},k)=>p.ids.forEach(id=>S.roster.assign[id]=k));
+    commit();
+    const r=document.querySelectorAll('#report .block')[2]; if(r && r.scrollIntoView) r.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    return;
+  }
+  if(e.target.closest('[data-addplayer]')){ S.roster.names.push('Player '+(S.roster.names.length+1)); commit(); return; }
+  if(e.target.closest('[data-clearroster]')){ S.roster.assign={}; commit(); return; }
+  const cell=e.target.closest('[data-pair]');
+  if(cell){ selectPair(cell); }
+});
+$('#report').addEventListener('keydown',e=>{ const cell=e.target.closest('[data-pair]'); if(cell && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); selectPair(cell); } });
+function selectPair(cell){
+  document.querySelectorAll('.matrix td.sel').forEach(x=>x.classList.remove('sel'));
+  cell.classList.add('sel');
+  const [a,b]=cell.dataset.pair.split('|');
+  $('#matrixDetail').innerHTML=pairSentence(a,b);
+}
+$('#report').addEventListener('change',e=>{
+  const sel=e.target.closest('[data-assign]');
+  if(sel){ const v=sel.value; if(v==='') delete S.roster.assign[sel.dataset.assign]; else S.roster.assign[sel.dataset.assign]=+v; commit(); return; }
+  const pn=e.target.closest('[data-pname]');
+  if(pn){ S.roster.names[+pn.dataset.pname]=pn.value.trim()||('Player '+(+pn.dataset.pname+1)); commit(); }
+});
+
+/* data events */
+$('#dlJson').addEventListener('click',()=>offerFile('18-musicians-doubling-backup.json',JSON.stringify(sharedOf(S),null,1)));
+$('#dlCsv').addEventListener('click',()=>offerFile('18-musicians-bar-by-bar.csv',barCSV()));
+$('#dlReport').addEventListener('click',()=>offerFile('18-musicians-doubling-report.html',reportDoc()));
+$('#importFile').addEventListener('change',e=>{
+  const f=e.target.files && e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ importState(JSON.parse(r.result)); $('#importMsg').textContent='Loaded '+f.name+'.'; }catch(err){ $('#importMsg').textContent=err.message||'That file couldn’t be read.'; } e.target.value=''; };
+  r.onerror=()=>{ $('#importMsg').textContent='That file couldn’t be read.'; };
+  r.readAsText(f);
+});
+$('#pasteImport').addEventListener('click',()=>openModal('Paste a backup','Paste the full contents of a backup file, then load it. This replaces everything currently logged.','', 'Load backup', ()=>{
+  try{ importState(JSON.parse($('#modalText').value)); closeModal(); $('#importMsg').textContent='Backup loaded.'; }
+  catch(err){ $('#modalHint').textContent=err.message||'That text isn’t a valid backup.'; }
+}));
+$('#modalAction').addEventListener('click',()=>{ if(modalAct) modalAct(); });
+$('#modalClose').addEventListener('click',closeModal);
+$('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
+$('#resetAll').addEventListener('click',e=>armOrRun(e.currentTarget,'reset','Click again to erase everything',()=>{
+  if(readOnly()) return;
+  S=defaultState(); undoStack.length=0;
+  invalidate(); markDirty(); renderAll();
+  e.currentTarget && (e.currentTarget.textContent='Erase everything', e.currentTarget.classList.remove('armed'));
+}));
+
+/* ---------- boot ---------- */
+renderAll();
+initSync();
+})();
+</script>
+</body>
+</html>
