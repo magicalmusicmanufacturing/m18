@@ -1068,7 +1068,7 @@
  "bars": {},
  "rules": {
   "minBars": 1,
-  "minSec": 5,
+  "minSec": 10,
   "crossExtra": 0,
   "locks": [],
   "nevers": []
@@ -1113,6 +1113,6 @@
  },
  "meta": {
   "editor": "magicalmusicmanufacturing",
-  "savedAt": "2026-10-02T06:03:36.433Z"
+  "savedAt": "2026-10-02T06:03:46.403Z"
  }
 }
