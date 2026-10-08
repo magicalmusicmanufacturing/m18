@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>18 Musicians doubling map</title>
+<meta name="author" content="Alexander Zhu">
+<meta name="copyright" content="Copyright 2026 Alexander Zhu">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
@@ -107,6 +109,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .tile .chg.out{color:var(--red)}
 .tile.hit{outline:3px solid var(--ink);outline-offset:1px}
 @media (prefers-reduced-motion: reduce){.tile{transition:none}}
+.timing{font-size:13px;line-height:1.5;margin:-4px 0 12px;padding:8px 10px;background:var(--sheet);border:1.5px solid var(--rule-2)}
+.timing b{font-weight:700}
+.timing .dim{display:block}
 .here{margin-top:14px;font-size:13.5px;color:var(--ink-2)}
 .tlhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 8px;flex-wrap:wrap}
 .seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
@@ -177,6 +182,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:4px 0 12px;font-size:14px}
 .kv dt{color:var(--ink-2)}
 .kv dd{margin:0;word-break:break-word}
+.foot{max-width:1320px;margin:8px auto 0;padding:14px 20px 24px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:20px;z-index:10}
 .modal[hidden]{display:none}
 .modal .box{background:var(--sheet);border:1.5px solid var(--ink);max-width:760px;width:100%;padding:18px;max-height:90%;display:flex;flex-direction:column;gap:10px}
@@ -215,11 +221,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
         <div class="field"><label for="jump">Go to bar</label><input id="jump" type="number" min="1" inputmode="numeric"></div>
         <div class="field"><label for="secJump">Go to section</label><select id="secJump"></select></div>
       </div>
-      <div class="field">
-        <label for="rep">Repeats of this bar</label>
-        <input id="rep" type="text" placeholder="1, 4-6, or 12s" autocomplete="off">
-        <div class="hint" id="durHint"></div>
+      <div class="two">
+        <div class="field"><label for="rep">Repeats</label>
+          <input id="rep" type="text" placeholder="1" autocomplete="off" aria-describedby="durHint"></div>
+        <div class="field"><label for="barBeats">Beats in this bar</label>
+          <input id="barBeats" type="number" min="0.5" step="any" inputmode="decimal" autocomplete="off" aria-describedby="durHint"></div>
       </div>
+      <div class="timing" id="durHint" aria-live="polite"></div>
       <div class="field">
         <label for="note">Note for this bar</label>
         <input id="note" type="text" placeholder="Cue, breath length, page turn" autocomplete="off">
@@ -234,6 +242,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
           <dt>Part keys</dt><dd>Mark that part starting or stopping at this bar. Press again to remove the mark.</dd>
           <dt>Ctrl/⌘+Z</dt><dd>Undo</dd>
           <dt>Esc</dt><dd>Leave a text box</dd>
+          <dt>Enter</dt><dd>Save a repeats or beats entry and go back to logging</dd>
         </dl>
       </details>
     </div>
@@ -246,13 +255,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
   </div>
   <div class="tlhead">
     <h2 id="tlTitle">Whole piece</h2>
-    <div class="seg" role="group" aria-label="Timeline range">
-      <button data-zoom="whole" aria-pressed="true">Whole piece</button>
-      <button data-zoom="near" aria-pressed="false">Around this bar</button>
+    <div class="inline">
+      <div class="seg" role="group" aria-label="Timeline spacing">
+        <button data-spacing="bars" aria-pressed="true">Equal bars</button>
+        <button data-spacing="time" aria-pressed="false">By length</button>
+      </div>
+      <div class="seg" role="group" aria-label="Timeline range">
+        <button data-zoom="whole" aria-pressed="true">Whole piece</button>
+        <button data-zoom="near" aria-pressed="false">Around this bar</button>
+      </div>
     </div>
   </div>
   <div class="tlwrap"><canvas id="tl" aria-label="Timeline of which parts play in each bar. Click to jump to a bar."></canvas></div>
-  <p class="hint">Click the timeline to jump to a bar.</p>
+  <p class="hint" id="tlHint">Click the timeline to jump to a bar. Crosshatched rows are extra players.</p>
 </section>
 
 <!-- SETUP -->
@@ -277,7 +292,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
   </div>
   <div class="block">
     <h2>Parts</h2>
-    <p class="lede">One row per player’s line. Piano 3, Piano 4 and Marimba 3 each have a second-player row for the passages where two people share the part; log it only where the second player is in. Add more rows the same way if you find other shared parts. Station is where the instrument sits on stage (e.g. “L”, “C”, “R”); switching between stations can require extra time. Parts with the same shared-button name are logged with one button but still count as separate players. Tick “Own part only” for players who never cover anything else.</p>
+    <p class="lede">One row per player’s line. Piano 3, Piano 4 and Marimba 3 each have a second-player row for the passages where two people share the part; log it only where the second player is in. Add more rows the same way if you find other shared parts. Station is where the instrument sits on stage (e.g. “L”, “C”, “R”); switching between stations can require extra time. Parts with the same shared-button name are logged with one button but still count as separate players. Tick “Own part only” for players who never cover anything else, and “Extra player” for second and third players on a shared part (they’re crosshatched on the timeline).</p>
     <div id="trackTable"></div>
     <div class="inline" style="margin-top:10px"><button class="btn small" id="addTrack">Add part</button><span id="keyWarn" class="hint warn"></span></div>
   </div>
@@ -355,6 +370,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
   </div>
 </section>
 </main>
+<footer class="foot">Copyright © 2026 Alexander Zhu</footer>
 
 <div class="modal" id="modal" hidden>
   <div class="box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -385,7 +401,7 @@ const STORE_KEY = 'm18-doubling-v1';
 const FAMILIES = ['Clarinets','Maracas','Xylophones','Vibraphone','Marimbas','Pianos','Voices','Strings','Other'];
 const SECTION_NAMES = ['Pulses','I','II','IIIA','IIIB','IV','V','VI','VII','VIII','IX','X','XI','Pulses (closing)'];
 
-const T = (id,name,short,key,family,link)=>({id,name,short,key,family,station:'',link:link||'',fixed:false});
+const T = (id,name,short,key,family,link)=>({id,name,short,key,family,station:'',link:link||'',fixed:false,extra:false});
 const DEFAULT_TRACKS = [
   T('cl1','Clarinet 1 / bass clarinet','Cl 1','3','Clarinets','Clarinets'),
   T('cl2','Clarinet 2 / bass clarinet','Cl 2','','Clarinets','Clarinets'),
@@ -412,7 +428,7 @@ const DEFAULT_TRACKS = [
   T('vln','Violin','Vln','1','Strings'),
   T('vc','Cello','Vc','2','Strings')
 ];
-DEFAULT_TRACKS.forEach(t=>{ if(t.id==='vln'||t.id==='vc') t.fixed=true; });
+DEFAULT_TRACKS.forEach(t=>{ if(t.id==='vln'||t.id==='vc') t.fixed=true; if(['p3b','p4b','m3b','m3c'].includes(t.id)) t.extra=true; });
 
 /* Version 1 had separate clarinet and bass clarinet parts and no second players. */
 function upgradeV2(s){
@@ -488,6 +504,11 @@ function upgradeV5(s){
 }
 
 /* Version 6: adds a third Marimba 3 player. Logged data is untouched. */
+/* Version 7: marks the extra-player parts so the timeline can crosshatch them. */
+function upgradeV7(s){
+  s.tracks.forEach(t=>{ if(['p3b','p4b','m3b','m3c'].includes(t.id)) t.extra=true; });
+  s.version=7;
+}
 function upgradeV6(s){
   if(!s.tracks.some(t=>t.id==='m3c')){
     const def=Object.assign({},DEFAULT_TRACKS.find(t=>t.id==='m3c'));
@@ -500,7 +521,7 @@ function upgradeV6(s){
 
 function defaultState(){
   return {
-    version:6, totalBars:748, tempo:null, beatsPerBar:null,
+    version:7, totalBars:748, tempo:null, beatsPerBar:null,
     tracks:DEFAULT_TRACKS.map(t=>Object.assign({},t)),
     sections: SECTION_NAMES.map((n,i)=>({id:'s'+i,name:n,start:i===0?1:null,tempo:null,beats:null})),
     events:{}, bars:{},
@@ -521,16 +542,18 @@ function migrate(o){
   if(!Array.isArray(s.roster.names)) s.roster.names=[];
   if(!s.roster.assign || typeof s.roster.assign!=='object') s.roster.assign={};
   if(!Array.isArray(s.tracks) || !s.tracks.length) s.tracks=d.tracks;
-  s.tracks.forEach(t=>{ if(t.station==null) t.station=''; if(t.link==null) t.link=''; t.fixed=!!t.fixed; if(!t.family) t.family='Other'; });
+  s.tracks.forEach(t=>{ if(t.station==null) t.station=''; if(t.link==null) t.link=''; t.fixed=!!t.fixed; t.extra=!!t.extra; if(!t.family) t.family='Other'; });
   if(!Array.isArray(s.sections)) s.sections=d.sections;
   if(!s.events || typeof s.events!=='object') s.events={};
   if(!s.bars || typeof s.bars!=='object') s.bars={};
+  if(s.spacing!=='time') s.spacing='bars';
   s.totalBars = Math.max(1, parseInt(s.totalBars,10)||748);
   if(!(o.version>=2)) upgradeV2(s);
   if(!(o.version>=3)) upgradeV3(s);
   if(!(o.version>=4)) upgradeV4(s);
   if(!(o.version>=5)) upgradeV5(s);
   if(!(o.version>=6)) upgradeV6(s);
+  if(!(o.version>=7)) upgradeV7(s);
   s.cursor = Math.min(Math.max(1, parseInt(s.cursor,10)||1), s.totalBars);
   return s;
 }
@@ -614,19 +637,26 @@ function compute(){
     spans[t.id]=sp;
   }
   const dMin=new Float64Array(N+2), dMax=new Float64Array(N+2), unk=new Uint8Array(N+2);
+  const barBeats=new Float64Array(N+2), beatSrc=new Uint8Array(N+2); // 0 none, 1 global, 2 section, 3 this bar
+  const bMin=new Float64Array(N+2), bMax=new Float64Array(N+2), bUnk=new Uint8Array(N+2);
+  const pbMin=new Float64Array(N+2), pbMax=new Float64Array(N+2), pbUnk=new Int32Array(N+2);
   const pMin=new Float64Array(N+2), pMax=new Float64Array(N+2), pUnk=new Int32Array(N+2);
   let anyKnown=false;
   for(let b=1;b<=N;b++){
     const r = parseRep(S.bars[b] && S.bars[b].rep);
     const si = secIdx[b], sec = si>=0 ? S.sections[si] : null;
     const tempo = pos(sec&&sec.tempo) || pos(S.tempo);
-    const beats = pos(sec&&sec.beats) || pos(S.beatsPerBar);
+    const own = pos(S.bars[b] && S.bars[b].beats);
+    const beats = own || pos(sec&&sec.beats) || pos(S.beatsPerBar);
+    barBeats[b]=beats; beatSrc[b]= own?3 : pos(sec&&sec.beats)?2 : pos(S.beatsPerBar)?1 : 0;
+    if(r.kind!=='sec' && beats){ bMin[b]=beats*r.min; bMax[b]=beats*r.max; } else bUnk[b]=1;
+    pbMin[b]=pbMin[b-1]+bMin[b]; pbMax[b]=pbMax[b-1]+bMax[b]; pbUnk[b]=pbUnk[b-1]+bUnk[b];
     if(r.kind==='sec'){ dMin[b]=r.min; dMax[b]=r.max; anyKnown=true; }
     else if(tempo && beats){ const per=beats*60/tempo; dMin[b]=per*r.min; dMax[b]=per*r.max; anyKnown=true; }
     else unk[b]=1;
     pMin[b]=pMin[b-1]+dMin[b]; pMax[b]=pMax[b-1]+dMax[b]; pUnk[b]=pUnk[b-1]+unk[b];
   }
-  return {N,on,spans,secIdx,ranges,secs,dMin,dMax,unk,pMin,pMax,pUnk,anyKnown};
+  return {N,on,spans,secIdx,ranges,secs,dMin,dMax,unk,pMin,pMax,pUnk,anyKnown,barBeats,beatSrc,bMin,bMax,bUnk,pbMin,pbMax,pbUnk};
 }
 function spanSec(c,a,b){
   if(a>b) return {min:0,max:0,known:true};
@@ -898,9 +928,9 @@ function normalizeDoc(doc){
   if(doc && doc.events) Object.keys(doc.events).forEach(id=>{ normalizeEv(doc.events[id]); if(!Object.keys(doc.events[id]).length) delete doc.events[id]; });
   return doc;
 }
-function sharedOf(st){ const o=JSON.parse(JSON.stringify(st)); delete o.cursor; delete o.zoom; delete o.updatedAt; delete o.meta; return o; }
+function sharedOf(st){ const o=JSON.parse(JSON.stringify(st)); delete o.cursor; delete o.zoom; delete o.spacing; delete o.updatedAt; delete o.meta; return o; }
 function applyShared(doc){
-  const keep={cursor:S.cursor, zoom:S.zoom, updatedAt:S.updatedAt};
+  const keep={cursor:S.cursor, zoom:S.zoom, spacing:S.spacing, updatedAt:S.updatedAt};
   S=migrate(Object.assign({}, clone(doc), keep));
   invalidate();
 }
@@ -1095,7 +1125,7 @@ function renderShare(){
 function applyReadOnly(){
   const ro=readOnly();
   $('#roBanner').hidden=!ro;
-  document.querySelectorAll('#tab-setup input,#tab-setup select,#tab-setup button,#tab-report input,#tab-report select,#report button[data-useopt],#report button[data-addplayer],#report button[data-clearroster],#rep,#note,.tile,#undoBtn').forEach(el=>{
+  document.querySelectorAll('#tab-setup input,#tab-setup select,#tab-setup button,#tab-report input,#tab-report select,#report button[data-useopt],#report button[data-addplayer],#report button[data-clearroster],#rep,#barBeats,#note,.tile,#undoBtn').forEach(el=>{
     el.disabled = ro || (el.id==='undoBtn' && !undoStack.length);
   });
   document.querySelectorAll('.tile').forEach(el=>{ if(ro) el.setAttribute('aria-disabled','true'); else el.removeAttribute('aria-disabled'); });
@@ -1231,17 +1261,16 @@ function renderFollow(){
   $('#barNum').textContent=b;
   $('#barTotal').textContent='of '+S.totalBars;
   const si=c.secIdx[b];
-  if(si>=0){ const s=S.sections[si]; const r=c.ranges[s.id]; $('#secName').textContent=s.name||'Untitled section'; $('#secRange').textContent='Bars '+r[0]+'–'+r[1]+', bar '+(b-r[0]+1)+' of '+(r[1]-r[0]+1); }
+  if(si>=0){ const s=S.sections[si]; const r=c.ranges[s.id]; $('#secName').textContent=s.name||'Untitled section'; const sd=spanSec(c,r[0],r[1]); $('#secRange').textContent='Bars '+r[0]+'–'+r[1]+', bar '+(b-r[0]+1)+' of '+(r[1]-r[0]+1)+(sd.known?', about '+fmtClockRange(sd.min,sd.max)+' long':''); }
   else { $('#secName').textContent='No section'; $('#secRange').textContent='Add section start bars in Setup.'; }
   const rep=$('#rep'), note=$('#note'), bd=S.bars[b]||{};
   if(document.activeElement!==rep) rep.value=bd.rep||'';
   if(document.activeElement!==note) note.value=bd.note||'';
-  const pr=parseRep(bd.rep);
-  let hint;
-  if(!pr.ok) hint='<span class="warn">Use a number (4), a range (4-6) or seconds (12s).</span>';
-  else if(c.unk[b]) hint='Set a tempo in Setup to see seconds.';
-  else hint='This bar lasts about '+esc(fmtSec({min:c.dMin[b],max:c.dMax[b]}))+'.';
-  $('#durHint').innerHTML=hint;
+  const bb=$('#barBeats');
+  if(document.activeElement!==bb) bb.value = bd.beats!=null ? bd.beats : '';
+  const inherited = c.beatSrc[b]===2 ? (S.sections[si].beats+' (section)') : c.beatSrc[b]===1 ? (S.beatsPerBar+' (default)') : 'not set';
+  bb.placeholder = bd.beats!=null ? '' : (c.beatSrc[b]===2||c.beatSrc[b]===1 ? String(c.beatSrc[b]===2?S.sections[si].beats:S.beatsPerBar) : '');
+  $('#durHint').innerHTML=timingHTML(c,b,bd,inherited);
   let sounding=0; const changes=[];
   S.tracks.forEach(t=>{ if(c.on[t.id][b]) sounding++; });
   tileGroups.forEach(g=>{
@@ -1264,6 +1293,34 @@ function renderFollow(){
   $('#undoBtn').disabled=!undoStack.length;
   renderTimeline();
 }
+function fmtClock(sec){ const t=Math.round(sec); const m=Math.floor(t/60), s=t%60; return m+':'+String(s).padStart(2,'0'); }
+function fmtClockRange(a,b){ const x=fmtClock(a), y=fmtClock(b); return x===y?x:x+'–'+y; }
+function fmtBeats(a,b){ const x=fmtNum(a), y=fmtNum(b); return (x===y?x:x+'–'+y)+' beats'; }
+function timingHTML(c,b,bd,inherited){
+  const pr=parseRep(bd.rep);
+  if(!pr.ok) return '<span class="warn">Repeats: use a number (4), a range (4-6) or seconds (12s).</span>';
+  const parts=[];
+  if(pr.kind==='sec'){
+    parts.push('<b>Timed bar:</b> '+esc(fmtSec({min:pr.min,max:pr.max})));
+  } else {
+    const beats=c.barBeats[b];
+    const repTxt = pr.min===pr.max ? plural(pr.min,'repeat') : pr.min+'–'+pr.max+' repeats';
+    if(beats){
+      let line='<b>'+fmtNum(beats)+' beats × '+esc(repTxt)+'</b> = '+fmtBeats(c.bMin[b],c.bMax[b]);
+      if(!c.unk[b]) line+=' ≈ '+esc(fmtSec({min:c.dMin[b],max:c.dMax[b]}));
+      parts.push(line);
+      if(bd.beats==null) parts.push('<span class="dim">Beats from '+(c.beatSrc[b]===2?'the section':'the default')+' setting.</span>');
+      if(c.unk[b]) parts.push('<span class="dim">Set a tempo in Setup to see seconds.</span>');
+    } else {
+      parts.push('<b>'+esc(repTxt)+'</b>. Enter the beats in this bar, or a default in Setup, to see its length.');
+    }
+  }
+  if(b>1){
+    if(c.pUnk[b-1]===0) parts.push('<span class="dim">Starts about '+fmtClockRange(c.pMin[b-1],c.pMax[b-1])+' into the piece.</span>');
+    else if(c.pbUnk[b-1]===0) parts.push('<span class="dim">Starts about '+fmtBeats(c.pbMin[b-1],c.pbMax[b-1])+' into the piece.</span>');
+  }
+  return parts.join(' ');
+}
 function buildSecJump(){
   const sj=$('#secJump'); sj.innerHTML='<option value="">Choose…</option>';
   S.sections.forEach(s=>{ const o=document.createElement('option'); o.value=s.id; o.textContent=(s.name||'Untitled')+(Number.isFinite(s.start)?' (bar '+s.start+')':' (no start bar)'); if(!Number.isFinite(s.start)) o.disabled=true; sj.appendChild(o); });
@@ -1274,33 +1331,71 @@ function cssVar(n){ return getComputedStyle(document.documentElement).getPropert
 let tlGeom=null;
 const FAMILY_VAR={'Clarinets':'--tl-cl','Maracas':'--tl-mrc','Xylophones':'--tl-xyl','Vibraphone':'--tl-vib','Marimbas':'--tl-mar','Pianos':'--tl-pno','Voices':'--tl-vox','Strings':'--tl-str'};
 function familyColor(f){ return cssVar(FAMILY_VAR[f]||'--tl-other'); }
+function hatch(g,color,dpr){
+  const n=Math.max(4,Math.round(5*dpr));
+  const pc=document.createElement('canvas'); pc.width=n; pc.height=n;
+  const p=pc.getContext('2d'); if(!p) return color;
+  p.strokeStyle=color; p.lineWidth=Math.max(1,dpr);
+  p.beginPath(); p.moveTo(0,0); p.lineTo(n,n); p.moveTo(n,0); p.lineTo(0,n);
+  p.moveTo(-1,n-1); p.lineTo(1,n+1); p.moveTo(n-1,-1); p.lineTo(n+1,1); p.stroke();
+  const pat=g.createPattern(pc,'repeat');
+  if(pat && pat.setTransform && typeof DOMMatrix!=='undefined') pat.setTransform(new DOMMatrix().scale(1/dpr));
+  return pat||color;
+}
+/* Bar widths for "By length": seconds where known, otherwise beats, otherwise equal. */
+function barWeights(c,r0,r1){
+  const w=new Float64Array(r1-r0+1);
+  let allSec=true, allBeats=true, sumSec=0, nSec=0;
+  for(let b=r0;b<=r1;b++){ if(c.unk[b]) allSec=false; else { sumSec+=(c.dMin[b]+c.dMax[b])/2; nSec++; } if(c.bUnk[b]) allBeats=false; }
+  let mode='bars';
+  if(allSec) mode='sec'; else if(allBeats) mode='beats'; else if(nSec) mode='mixed';
+  const avg=nSec?sumSec/nSec:1;
+  for(let b=r0;b<=r1;b++){
+    let v=1;
+    if(mode==='sec'||mode==='mixed') v = c.unk[b] ? avg : (c.dMin[b]+c.dMax[b])/2;
+    else if(mode==='beats') v=(c.bMin[b]+c.bMax[b])/2;
+    w[b-r0]=Math.max(v,1e-6);
+  }
+  return {w,mode};
+}
 function renderTimeline(){
   const cv=$('#tl'); if(!cv || tab!=='follow') return;
   const c=comp();
   const W=Math.max(300, cv.parentElement.clientWidth-12);
   const rows=S.tracks.length, labelW=58, rowH=11, top=20;
-  const H=top+rows*rowH+4;
+  let r0=1, r1=c.N;
+  if(S.zoom==='near'){ const half=48; r0=Math.max(1,S.cursor-half); r1=Math.min(c.N,r0+half*2); r0=Math.max(1,r1-half*2); }
+  const plotW=W-labelW-2, n=r1-r0+1;
+  const byTime=S.spacing==='time';
+  const {w,mode}=byTime ? barWeights(c,r0,r1) : {w:new Float64Array(n).fill(1),mode:'bars'};
+  const cum=new Float64Array(n+1); for(let i=0;i<n;i++) cum[i+1]=cum[i]+w[i];
+  const total=cum[n]||1, k=plotW/total;
+  const showClock = byTime && mode==='sec';
+  const axisH = showClock ? 14 : 0;
+  const H=top+rows*rowH+4+axisH;
   const dpr=window.devicePixelRatio||1;
   cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
   cv.style.height=H+'px';
   const g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
   const col={ink:cssVar('--ink'),ink2:cssVar('--ink-2'),rule:cssVar('--rule-2'),blue:cssVar('--blue'),red:cssVar('--red'),wash:cssVar('--gray-wash'),sheet:cssVar('--sheet')};
   g.fillStyle=col.sheet; g.fillRect(0,0,W,H);
-  let r0=1, r1=c.N;
-  if(S.zoom==='near'){ const half=48; r0=Math.max(1,S.cursor-half); r1=Math.min(c.N,r0+half*2); r0=Math.max(1,r1-half*2); }
-  const plotW=W-labelW-2, n=r1-r0+1, bw=plotW/n;
-  const x=b=>labelW+(b-r0)*bw;
-  tlGeom={labelW,r0,r1,bw,W};
+  const x=b=>labelW+cum[b-r0]*k;           // left edge of bar b
+  const xr=b=>labelW+cum[b-r0+1]*k;        // right edge of bar b
+  const barAt=px=>{ const t=(px-labelW)/k; let lo=0, hi=n-1; while(lo<hi){ const m=(lo+hi+1)>>1; if(cum[m]<=t) lo=m; else hi=m-1; } return r0+lo; };
+  tlGeom={labelW,r0,r1,W,barAt};
   $('#tlTitle').textContent = S.zoom==='near' ? 'Bars '+r0+'–'+r1 : 'Whole piece';
+  const hint=$('#tlHint');
+  if(hint) hint.textContent = 'Click the timeline to jump to a bar. Crosshatched rows are extra players.' +
+    (byTime ? (mode==='sec' ? ' Bars are drawn by estimated length.' : mode==='beats' ? ' Bars are drawn by beats; add a tempo to draw them by seconds.' : mode==='mixed' ? ' Bars without a known length are drawn at the average length.' : ' Set beats per bar or a tempo in Setup to draw bars by length.') : '');
   // sections
   g.font='600 11px Archivo, Arial, sans-serif'; g.textBaseline='middle';
-  c.secs.forEach((s,k)=>{
+  c.secs.forEach((s,i)=>{
     const rg=c.ranges[s.id]; if(!rg) return;
     const a=Math.max(rg[0],r0), b=Math.min(rg[1],r1); if(a>b) return;
-    if(k%2===1){ g.fillStyle=col.wash; g.fillRect(x(a),0,(b-a+1)*bw,H); }
-    g.fillStyle=col.rule; g.fillRect(x(rg[0])-0.5,0,1,H);
-    const label=s.name||''; const w=(b-a+1)*bw;
-    if(w>g.measureText(label).width+6){ g.fillStyle=col.ink2; g.fillText(label,x(a)+3,top/2); }
+    if(i%2===1){ g.fillStyle=col.wash; g.fillRect(x(a),0,xr(b)-x(a),H-axisH); }
+    if(rg[0]>=r0){ g.fillStyle=col.rule; g.fillRect(x(rg[0])-0.5,0,1,H-axisH); }
+    const label=s.name||'';
+    if(xr(b)-x(a)>g.measureText(label).width+6){ g.fillStyle=col.ink2; g.fillText(label,x(a)+3,top/2); }
   });
   // rows
   S.tracks.forEach((t,i)=>{
@@ -1308,16 +1403,41 @@ function renderTimeline(){
     g.fillStyle=col.ink2; g.font='500 10px Archivo, Arial, sans-serif';
     g.fillText(t.short||t.name,2,y+rowH/2);
     g.fillStyle=col.rule; g.fillRect(labelW,y+rowH-0.5,plotW,0.5);
-    g.fillStyle=familyColor(t.family);
+    const color=familyColor(t.family);
+    const pat = t.extra ? hatch(g,color,dpr) : null;
     (c.spans[t.id]||[]).forEach(([a,b])=>{
       const aa=Math.max(a,r0), bb=Math.min(b,r1); if(aa>bb) return;
-      g.fillRect(x(aa),y+2,Math.max(1,(bb-aa+1)*bw),rowH-4);
+      const x0=x(aa), wd=Math.max(1,xr(bb)-x0);
+      if(t.extra){
+        g.globalAlpha=.18; g.fillStyle=color; g.fillRect(x0,y+2,wd,rowH-4); g.globalAlpha=1;
+        g.fillStyle=pat; g.fillRect(x0,y+2,wd,rowH-4);
+        g.strokeStyle=color; g.lineWidth=1; g.strokeRect(x0+0.5,y+2.5,Math.max(0,wd-1),rowH-5);
+      } else { g.fillStyle=color; g.fillRect(x0,y+2,wd,rowH-4); }
     });
   });
+  // minute marks
+  if(showClock){
+    const t0=c.pMin[r0-1]+c.pMax[r0-1], tEnd=c.pMin[r1]+c.pMax[r1];
+    const start=t0/2, end=tEnd/2, span=end-start;
+    const step = span>1200?120 : span>360?60 : span>120?30 : 10;
+    g.font='500 10px Archivo, Arial, sans-serif'; g.textBaseline='middle';
+    const yA=H-axisH/2;
+    for(let s=Math.ceil(start/step)*step; s<=end; s+=step){
+      // find the bar containing time s (midpoint estimate)
+      let lo=r0, hi=r1;
+      while(lo<hi){ const m=(lo+hi)>>1; if((c.pMin[m]+c.pMax[m])/2 < s) lo=m+1; else hi=m; }
+      const bStart=(c.pMin[lo-1]+c.pMax[lo-1])/2, bLen=(c.dMin[lo]+c.dMax[lo])/2||1;
+      const px=x(lo)+(xr(lo)-x(lo))*Math.min(1,Math.max(0,(s-bStart)/bLen));
+      g.fillStyle=col.rule; g.fillRect(px-0.5,top,1,rows*rowH);
+      g.fillStyle=col.ink2; const lbl=fmtClock(s); const tw=g.measureText(lbl).width;
+      if(px-tw/2>labelW && px+tw/2<W) g.fillText(lbl,px-tw/2,yA);
+    }
+  }
   // cursor
   if(S.cursor>=r0 && S.cursor<=r1){
-    g.fillStyle=col.red; g.globalAlpha=.18; g.fillRect(x(S.cursor),top,Math.max(1,bw),rows*rowH); g.globalAlpha=1;
-    g.fillRect(x(S.cursor)+Math.max(1,bw)/2-1,0,2,H);
+    const cx=x(S.cursor), cw=Math.max(1,xr(S.cursor)-cx);
+    g.fillStyle=col.red; g.globalAlpha=.18; g.fillRect(cx,top,cw,rows*rowH); g.globalAlpha=1;
+    g.fillRect(cx+cw/2-1,0,2,H-axisH);
   }
 }
 
@@ -1347,7 +1467,7 @@ function renderSetup(){
   if(starts.some(v=>v>S.totalBars)) sw='A start bar is past the last bar.';
   $('#secWarn').textContent=sw;
   // tracks
-  let t='<div class="scroll"><table class="tbl"><thead><tr><th>Name</th><th>Short name</th><th>Key</th><th>Row</th><th>Shared button</th><th>Station</th><th>Own part only</th><th></th></tr></thead><tbody>';
+  let t='<div class="scroll"><table class="tbl"><thead><tr><th>Name</th><th>Short name</th><th>Key</th><th>Row</th><th>Shared button</th><th>Station</th><th>Own part only</th><th>Extra player</th><th></th></tr></thead><tbody>';
   const fams=[...new Set([...FAMILIES, ...S.tracks.map(x=>x.family)])];
   S.tracks.forEach((tr,i)=>{
     t+='<tr data-tr="'+i+'"><td><input data-f="name" value="'+esc(tr.name)+'" aria-label="Part name"></td>'+
@@ -1357,6 +1477,7 @@ function renderSetup(){
       '<td style="width:150px"><input data-f="link" value="'+esc(tr.link)+'" placeholder="—" aria-label="Shared button for '+esc(tr.name)+'"></td>'+
       '<td style="width:90px"><input data-f="station" value="'+esc(tr.station)+'" placeholder="—" aria-label="Station"></td>'+
       '<td style="text-align:center"><input data-f="fixed" type="checkbox"'+(tr.fixed?' checked':'')+' aria-label="'+esc(tr.name)+' plays only its own part"></td>'+
+      '<td style="text-align:center"><input data-f="extra" type="checkbox"'+(tr.extra?' checked':'')+' aria-label="'+esc(tr.name)+' is an extra player"></td>'+
       '<td><button class="btn small danger" data-deltr="'+i+'">Remove</button></td></tr>';
   });
   t+='</tbody></table></div>';
@@ -1544,11 +1665,11 @@ function offerFile(filename, data){
 function csvCell(v){ const s=String(v==null?'':v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
 function barCSV(){
   const c=comp();
-  const head=['bar','section','repeats','seconds_low','seconds_high','note',...S.tracks.map(t=>t.name)];
+  const head=['bar','section','beats','repeats','beats_total_low','beats_total_high','seconds_low','seconds_high','start_seconds_low','start_seconds_high','note',...S.tracks.map(t=>t.name)];
   const lines=[head.map(csvCell).join(',')];
   for(let b=1;b<=c.N;b++){
     const si=c.secIdx[b], bd=S.bars[b]||{};
-    lines.push([b, si>=0?S.sections[si].name:'', bd.rep||'', c.unk[b]?'':fmtNum(c.dMin[b]), c.unk[b]?'':fmtNum(c.dMax[b]), bd.note||'', ...S.tracks.map(t=>c.on[t.id][b])].map(csvCell).join(','));
+    lines.push([b, si>=0?S.sections[si].name:'', c.barBeats[b]||'', bd.rep||'', c.bUnk[b]?'':fmtNum(c.bMin[b]), c.bUnk[b]?'':fmtNum(c.bMax[b]), c.unk[b]?'':fmtNum(c.dMin[b]), c.unk[b]?'':fmtNum(c.dMax[b]), c.pUnk[b-1]?'':fmtNum(c.pMin[b-1]), c.pUnk[b-1]?'':fmtNum(c.pMax[b-1]), bd.note||'', ...S.tracks.map(t=>c.on[t.id][b])].map(csvCell).join(','));
   }
   return lines.join('\n');
 }
@@ -1560,7 +1681,7 @@ function reportDoc(){
     ? summaryHTML(res)+optionsHTML(res,false)+rosterHTML(false)+candidatesHTML(res)+matrixHTML(false)+sectionsGridHTML()
     : '<p>No parts logged yet.</p>';
   const rules='<p class="hint">Changeover rules: at least '+plural(nonneg(S.rules.minBars),'silent bar')+' and '+nonneg(S.rules.minSec)+' s'+(nonneg(S.rules.crossExtra)?', plus '+nonneg(S.rules.crossExtra)+' s to change stations':'')+'. Generated '+d.toLocaleString()+'.</p>';
-  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Music for 18 Musicians doubling report</title><style>'+css+'</style></head><body><h1>Music for 18 Musicians: doubling report</h1>'+rules+body+'</body></html>';
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Music for 18 Musicians doubling report</title><style>'+css+'</style></head><body><h1>Music for 18 Musicians: doubling report</h1>'+rules+body+'<p class="hint" style="margin-top:24px">Copyright © 2026 Alexander Zhu</p></body></html>';
 }
 
 /* ---------- modal ---------- */
@@ -1576,7 +1697,7 @@ function closeModal(){ $('#modal').hidden=true; modalAct=null; }
 function importState(obj){
   if(!obj || !Array.isArray(obj.tracks) || typeof obj.events!=='object') throw new Error('This file isn’t a doubling-map backup.');
   if(readOnly()) throw new Error('Sign in to import.');
-  const keep={cursor:S.cursor, zoom:S.zoom};
+  const keep={cursor:S.cursor, zoom:S.zoom, spacing:S.spacing};
   S=migrate(Object.assign({},obj,keep)); undoStack.length=0;
   invalidate(); markDirty(); renderAll();
 }
@@ -1589,7 +1710,8 @@ function renderCurrent(){
   else { setStatus(); renderShare(); }
   applyReadOnly();
 }
-function renderAll(){ buildTiles(); buildSecJump(); document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.zoom===S.zoom))); renderCurrent(); setStatus(); }
+function syncSegs(){ document.querySelectorAll('[data-zoom]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.zoom===S.zoom))); document.querySelectorAll('[data-spacing]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.spacing===S.spacing))); }
+function renderAll(){ buildTiles(); buildSecJump(); syncSegs(); renderCurrent(); setStatus(); }
 function showTab(name){
   tab=name;
   document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
@@ -1616,6 +1738,16 @@ $('#rep').addEventListener('input',e=>{
   if(Object.keys(bd).length) S.bars[b]=bd; else delete S.bars[b];
   commit();
 });
+let beatsPushed=false;
+$('#barBeats').addEventListener('focus',()=>{beatsPushed=false;});
+$('#barBeats').addEventListener('input',e=>{
+  if(readOnly()) return;
+  if(!beatsPushed){ pushUndo(); beatsPushed=true; }
+  const b=S.cursor; const n=parseFloat(e.target.value);
+  const bd=S.bars[b]||{}; if(Number.isFinite(n)&&n>0) bd.beats=n; else delete bd.beats;
+  if(Object.keys(bd).length) S.bars[b]=bd; else delete S.bars[b];
+  commit();
+});
 $('#note').addEventListener('input',e=>{
   const b=S.cursor; const v=e.target.value;
   const bd=S.bars[b]||{}; if(v.trim()) bd.note=v; else delete bd.note;
@@ -1624,16 +1756,13 @@ $('#note').addEventListener('input',e=>{
   markDirty();
 });
 $('#undoBtn').addEventListener('click',undo);
-document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
-  S.zoom=b.dataset.zoom; saveLocal();
-  document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-  renderTimeline();
-}));
+document.querySelectorAll('[data-zoom]').forEach(b=>b.addEventListener('click',()=>{ S.zoom=b.dataset.zoom; saveLocal(); syncSegs(); renderTimeline(); }));
+document.querySelectorAll('[data-spacing]').forEach(b=>b.addEventListener('click',()=>{ S.spacing=b.dataset.spacing; saveLocal(); syncSegs(); renderTimeline(); }));
 $('#tl').addEventListener('click',e=>{
   if(!tlGeom) return;
   const rect=e.target.getBoundingClientRect(); const x=e.clientX-rect.left;
   if(x<tlGeom.labelW) return;
-  setBar(tlGeom.r0+Math.floor((x-tlGeom.labelW)/tlGeom.bw));
+  setBar(tlGeom.barAt(x));
 });
 let rz=null; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(renderTimeline,80); });
 if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',renderTimeline);
@@ -1691,7 +1820,7 @@ $('#trackTable').addEventListener('change',e=>{
   const tr=e.target.closest('tr[data-tr]'); if(!tr) return;
   const t=S.tracks[+tr.dataset.tr], f=e.target.dataset.f;
   let v=e.target.value;
-  if(f==='fixed') v=e.target.checked;
+  if(f==='fixed'||f==='extra') v=e.target.checked;
   else if(f==='key') v=v.trim().slice(0,1).toLowerCase();
   else if(f==='name') v=v.trim()||t.name;
   else v=v.trim();
