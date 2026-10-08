@@ -1,7 +1,7 @@
 {
  "version": 6,
  "totalBars": 748,
- "tempo": null,
+ "tempo": 208,
  "beatsPerBar": null,
  "tracks": [
   {
@@ -1177,6 +1177,6 @@
  },
  "meta": {
   "editor": "magicalmusicmanufacturing",
-  "savedAt": "2026-10-08T13:25:08.063Z"
+  "savedAt": "2026-10-08T13:25:38.285Z"
  }
 }
