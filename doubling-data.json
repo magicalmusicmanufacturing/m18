@@ -1,5 +1,5 @@
 {
- "version": 6,
+ "version": 7,
  "totalBars": 748,
  "tempo": 208,
  "beatsPerBar": null,
@@ -12,7 +12,8 @@
    "family": "Clarinets",
    "station": "",
    "link": "Clarinets",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "cl2",
@@ -22,7 +23,8 @@
    "family": "Clarinets",
    "station": "",
    "link": "Clarinets",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "mr1",
@@ -32,7 +34,8 @@
    "family": "Maracas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "mr2",
@@ -42,7 +45,8 @@
    "family": "Maracas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "x1",
@@ -52,7 +56,8 @@
    "family": "Xylophones",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "x2",
@@ -62,7 +67,8 @@
    "family": "Xylophones",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "vib",
@@ -72,7 +78,8 @@
    "family": "Vibraphone",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "m1",
@@ -82,7 +89,8 @@
    "family": "Marimbas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "m2",
@@ -92,7 +100,8 @@
    "family": "Marimbas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "m3",
@@ -102,7 +111,8 @@
    "family": "Marimbas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "m3b",
@@ -112,7 +122,8 @@
    "family": "Marimbas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": true
   },
   {
    "id": "m3c",
@@ -122,7 +133,8 @@
    "family": "Marimbas",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": true
   },
   {
    "id": "p1",
@@ -132,7 +144,8 @@
    "family": "Pianos",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "p2",
@@ -142,7 +155,8 @@
    "family": "Pianos",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "p3",
@@ -152,7 +166,8 @@
    "family": "Pianos",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "p3b",
@@ -162,7 +177,8 @@
    "family": "Pianos",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": true
   },
   {
    "id": "p4",
@@ -172,7 +188,8 @@
    "family": "Pianos",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "p4b",
@@ -182,7 +199,8 @@
    "family": "Pianos",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": true
   },
   {
    "id": "v1",
@@ -192,7 +210,8 @@
    "family": "Voices",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "v2",
@@ -202,7 +221,8 @@
    "family": "Voices",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "v3",
@@ -212,7 +232,8 @@
    "family": "Voices",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "v4",
@@ -222,7 +243,8 @@
    "family": "Voices",
    "station": "",
    "link": "",
-   "fixed": false
+   "fixed": false,
+   "extra": false
   },
   {
    "id": "vln",
@@ -232,7 +254,8 @@
    "family": "Strings",
    "station": "",
    "link": "",
-   "fixed": true
+   "fixed": true,
+   "extra": false
   },
   {
    "id": "vc",
@@ -242,7 +265,8 @@
    "family": "Strings",
    "station": "",
    "link": "",
-   "fixed": true
+   "fixed": true,
+   "extra": false
   }
  ],
  "sections": [
@@ -694,7 +718,8 @@
    "619": 1,
    "633": 0,
    "638": 1,
-   "661": 0
+   "661": 0,
+   "664": 1
   },
   "cl1": {
    "5": 1,
@@ -1186,6 +1211,6 @@
  },
  "meta": {
   "editor": "magicalmusicmanufacturing",
-  "savedAt": "2026-10-08T17:21:20.301Z"
+  "savedAt": "2026-10-08T17:47:01.362Z"
  }
 }
